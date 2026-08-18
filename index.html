@@ -18,6 +18,8 @@
       </div>
     </div>
 
+    <button id="menu-btn" onclick="toggleSidebar()" aria-label="Meniu">&#9776;</button>
+
     <nav class="header-tabs">
       <button class="tab-btn active" id="tab-romana" onclick="switchTab('romana')">
         &#128221; Limba Romana
@@ -40,6 +42,7 @@
 
   <div class="app-body">
     <aside id="sidebar"></aside>
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <main id="content"></main>
   </div>
 

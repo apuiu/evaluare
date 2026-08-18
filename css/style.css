@@ -127,6 +127,33 @@ body {
 /* Search */
 .header-search { flex-shrink: 0; }
 
+/* Hamburger – vizibil doar pe mobil */
+#menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+#menu-btn:hover { background: rgba(255,255,255,.22); }
+
+/* Overlay întunecat din spatele sidebar-ului pe mobil */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 140;
+}
+
 .header-search input {
   padding: 7px 14px;
   border-radius: 8px;
@@ -601,15 +628,47 @@ body {
    ========================================== */
 
 @media (max-width: 768px) {
+  /* Sidebar alunecă din stânga; overlay apare în spatele lui */
   #sidebar {
+    width: min(280px, 80vw);
     transform: translateX(-100%);
-    transition: transform .3s;
+    transition: transform .3s ease;
     z-index: 150;
   }
-  #sidebar.open { transform: translateX(0); }
-  #content { margin-left: 0; padding: 20px 16px; }
-  .header-tabs .tab-btn { padding: 7px 14px; font-size: 12px; }
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  #sidebar.open ~ #sidebar-overlay,
+  #sidebar-overlay.visible {
+    display: block;
+  }
+  #content {
+    margin-left: 0;
+    padding: 16px;
+  }
+  /* Tab-uri cu scroll orizontal fără wrapping */
+  .header-tabs {
+    flex: 1;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+  .header-tabs::-webkit-scrollbar { display: none; }
+  .header-tabs .tab-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
   .brand-text { display: none; }
+  #menu-btn { display: flex; }
+  /* Search mai îngust */
+  .header-search input { width: 110px; }
+  /* Breadcrumb pe mai multe linii */
+  .breadcrumb { flex-wrap: wrap; }
+  /* Butoane navigare stivuite vertical */
+  .chapter-nav { flex-direction: column; gap: 8px; }
+  .btn-nav { max-width: 100%; text-align: center; }
 }
 
 /* ==========================================

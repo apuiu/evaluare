@@ -53,6 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// ─── MOBILE SIDEBAR TOGGLE ────────────────────────────────────
+function toggleSidebar() {
+  var sidebar  = document.getElementById('sidebar');
+  var overlay  = document.getElementById('sidebar-overlay');
+  var isOpen   = sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('visible', !isOpen);
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('visible');
+}
+
 // ─── TAB SWITCH ──────────────────────────────────────────────
 function switchTab(tab) {
   state.tab      = tab;
@@ -161,6 +175,8 @@ function selectChapter(grade, sectionId, chapterId) {
   state.openSections.add(grade + '-' + sectionId);
   buildSidebar();
   renderChapter();
+  // Pe mobil: închide sidebar după selectarea lecției
+  if (window.innerWidth <= 768) closeSidebar();
 }
 
 // ─── RENDER: WELCOME ──────────────────────────────────────────
