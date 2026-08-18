@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluare Nationala - Pregatire cls. 5-8</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="vendor/katex/katex.min.css" />
+</head>
+<body data-tab="romana">
+
+  <header id="app-header">
+    <div class="header-brand">
+      <span class="brand-icon">&#127891;</span>
+      <div class="brand-text">
+        <strong>Evaluare Nationala</strong>
+        <small>cls. 5-8</small>
+      </div>
+    </div>
+
+    <nav class="header-tabs">
+      <button class="tab-btn active" id="tab-romana" onclick="switchTab('romana')">
+        &#128221; Limba Romana
+      </button>
+      <button class="tab-btn" id="tab-matematica" onclick="switchTab('matematica')">
+        &#128208; Matematica
+      </button>
+      <button class="tab-btn" id="tab-fizica" onclick="switchTab('fizica')">
+        &#9889; Fizica
+      </button>
+      <button class="tab-btn" id="tab-chimie" onclick="switchTab('chimie')">
+        &#9881; Chimie
+      </button>
+    </nav>
+
+    <div class="header-search">
+      <input type="text" id="search-input" placeholder="Cauta..." />
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside id="sidebar"></aside>
+    <main id="content"></main>
+  </div>
+
+  <script src="data/romana5.js"></script>
+  <script src="data/romana6.js"></script>
+  <script src="data/romana7.js"></script>
+  <script src="data/romana8.js"></script>
+  <script src="data/matematica5.js"></script>
+  <script src="data/matematica6.js"></script>
+  <script src="data/matematica7.js"></script>
+  <script src="data/matematica8.js"></script>
+  <script src="data/fizica6.js"></script>
+  <script src="data/fizica7.js"></script>
+  <script src="data/fizica8.js"></script>
+  <script src="data/chimie7.js"></script>
+  <script src="vendor/katex/katex.min.js"></script>
+  <script src="vendor/katex/auto-render.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
