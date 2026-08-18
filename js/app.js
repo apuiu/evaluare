@@ -36,6 +36,13 @@ const GRADE_LABELS = {
   8: 'Clasa a VIII-a'
 };
 
+const TAB_LABELS = {
+  romana:    { label: 'Limba Română',  icon: '&#128221;' },
+  matematica:{ label: 'Matematică', icon: '&#128208;' },
+  fizica:    { label: 'Fizică',      icon: '&#9889;'   },
+  chimie:    { label: 'Chimie',       icon: '&#9881;'   }
+};
+
 const state = {
   tab: 'romana',
   grade: null,
@@ -181,9 +188,9 @@ function selectChapter(grade, sectionId, chapterId) {
 
 // ─── RENDER: WELCOME ──────────────────────────────────────────
 function renderWelcome() {
-  var isRo  = state.tab === 'romana';
-  var icon  = isRo ? '&#128221;' : '&#128208;';
-  var title = isRo ? 'Limba Romana' : 'Matematica';
+  var meta  = TAB_LABELS[state.tab] || TAB_LABELS.romana;
+  var icon  = meta.icon;
+  var title = meta.label;
   var available = [];
   for (var g = 5; g <= 8; g++) {
     if (DATA[state.tab][g] && DATA[state.tab][g].sections) available.push(GRADE_LABELS[g]);
@@ -219,7 +226,7 @@ function renderChapter() {
     if (section.chapters[j].id === chapterId) { chapter = section.chapters[j]; break; }
   }
 
-  var tabLabel = tab === 'romana' ? 'Romana' : 'Matematica';
+  var tabLabel = (TAB_LABELS[tab] || TAB_LABELS.romana).label;
 
   // Flat list of all chapters for prev/next
   var flat = [];
@@ -316,7 +323,7 @@ function doSearch(query) {
     var res = results[r];
     rows += '<div class="search-result" onclick="switchTab(\'' + res.subject + '\');selectChapter(' + res.grade + ',\'' + res.sectionId + '\',\'' + res.chapterId + '\')">' +
       '<strong>' + esc(res.chTitle) + '</strong>' +
-      '<span>' + (res.subject === 'romana' ? 'Romana' : 'Matematica') + ' &middot; ' + GRADE_LABELS[res.grade] + ' &middot; ' + esc(res.secTitle) + '</span>' +
+      '<span>' + ((TAB_LABELS[res.subject] || TAB_LABELS.romana).label) + ' &middot; ' + GRADE_LABELS[res.grade] + ' &middot; ' + esc(res.secTitle) + '</span>' +
     '</div>';
   }
 
@@ -329,4 +336,77 @@ function doSearch(query) {
 
 function esc(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── VALIDATOR CONȚINUT (rulează validateF7() în console) ────
+function validateF7() {
+  var data = typeof fizica7Data !== 'undefined' ? fizica7Data : null;
+  if (!data) { console.error('fizica7Data nu este încărcat!'); return; }
+
+  var topics   = typeof topicsF7    !== 'undefined' ? topicsF7    : {};
+  var recaps   = typeof recapTopicsF7 !== 'undefined' ? recapTopicsF7 : {};
+  var REQ      = ['learn','terms','properties','steps','tips','examples','exercises'];
+  var REQ_RECAP= ['summary','keys','mistakes','problem','exercises'];
+  var PLACEHOLDER = /de completat|TODO|\.\.\.|în pregătire/i;
+
+  var errors = 0, warnings = 0, ok = 0;
+
+  function check(id, obj, required, isRecap) {
+    var prefix = isRecap ? '[RECAP] ' : '[LECTIE] ';
+    var missing = required.filter(function(k){ return !obj[k] || (Array.isArray(obj[k]) && obj[k].length === 0); });
+    if (missing.length) {
+      console.error(prefix + id + ' ▸ câmpuri lipsă: ' + missing.join(', '));
+      errors++; return;
+    }
+    var warns = [];
+    if (!isRecap) {
+      if (obj.terms.length     < 3) warns.push('terms=' + obj.terms.length + ' (<3)');
+      if (obj.properties.length< 3) warns.push('props=' + obj.properties.length + ' (<3)');
+      if (obj.steps.length     < 3) warns.push('steps=' + obj.steps.length + ' (<3)');
+      if (obj.examples.length  < 2) warns.push('examples=' + obj.examples.length + ' (<2)');
+      if (obj.exercises.length < 3) warns.push('exercises=' + obj.exercises.length + ' (<3)');
+      obj.examples.forEach(function(ex, i) {
+        ['label','given','ask','solve','answer'].forEach(function(f) {
+          if (!ex[f]) warns.push('example[' + i + '].' + f + ' lipsă');
+        });
+      });
+    } else {
+      if (obj.keys.length     < 4) warns.push('keys=' + obj.keys.length + ' (<4)');
+      if (obj.mistakes.length < 3) warns.push('mistakes=' + obj.mistakes.length + ' (<3)');
+      if (obj.exercises.length< 3) warns.push('exercises=' + obj.exercises.length + ' (<3)');
+      ['label','given','ask','solve','answer'].forEach(function(f) {
+        if (!obj.problem[f]) warns.push('problem.' + f + ' lipsă');
+      });
+    }
+    // Detectează text placeholder
+    var flat = JSON.stringify(obj);
+    if (PLACEHOLDER.test(flat)) warns.push('conține text placeholder!');
+
+    if (warns.length) {
+      console.warn(prefix + id + ' ⚠ ' + warns.join(' | '));
+      warnings++;
+    } else {
+      console.log('%c✅ ' + prefix + id, 'color:green');
+      ok++;
+    }
+  }
+
+  // Parcurge toate secțiunile și capitolele din fizica7Data
+  data.sections.forEach(function(sec) {
+    sec.chapters.forEach(function(ch) {
+      var isRecap = ch.id.includes('recap');
+      var dict    = isRecap ? recaps : topics;
+      if (!dict[ch.id]) {
+        console.error('[MISSING] ' + ch.id + ' – lipsă din ' + (isRecap ? 'recapTopicsF7' : 'topicsF7'));
+        errors++;
+      } else {
+        check(ch.id, dict[ch.id], isRecap ? REQ_RECAP : REQ, isRecap);
+      }
+    });
+  });
+
+  var total = ok + warnings + errors;
+  console.log('─────────────────────────────────────────');
+  console.log('REZULTAT: ' + ok + '/' + total + ' OK | ⚠ ' + warnings + ' avertismente | ❌ ' + errors + ' erori');
+  return { ok, warnings, errors };
 }
