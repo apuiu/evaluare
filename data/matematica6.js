@@ -315,8 +315,8 @@ const topicData = {
 
   // ── Cap.3 Numere întregi – topicuri complete ─────────────────────────────
   "3.1.1-reprezentare-axa": {type:"integer",
-    learn: "Numerele întregi $\\mathbb{Z}=\\{...,-2,-1,0,1,2,...\\}$ se reprezintă pe o axă orientată. Pe axă numerele cresc de la stânga la dreapta.",
-    terms: ["$\\mathbb{Z}=\\{...,-2,-1,0,1,2,...\\}$: mulțimea numerelor întregi", "număr întreg pozitiv: $+1,+2,...$ (la dreapta lui 0)", "număr întreg negativ: $-1,-2,...$ (la stânga lui 0)", "opusul lui $a$: numărul $-a$, simetric față de 0 pe axă"],
+    learn: "Numerele întregi $\\mathbb{Z}=\\{...,-2,-1,0,1,2,...\\}$ se reprezintă pe o axă orientată. Fiecărui punct de pe axă îi corespunde un număr întreg numit <strong>abscisa</strong> punctului; scriem $P(a)$ pentru a arăta că punctul $P$ are abscisa $a$. Pe axă numerele cresc de la stânga la dreapta.",
+    terms: ["$\\mathbb{Z}=\\{...,-2,-1,0,1,2,...\\}$: mulțimea numerelor întregi", "abscisa punctului $P$: numărul întreg $a$ asociat punctului $P$ de pe axă; notație: $P(a)$", "număr întreg pozitiv: $+1,+2,...$ (la dreapta lui 0)", "număr întreg negativ: $-1,-2,...$ (la stânga lui 0)", "opusul lui $a$: numărul $-a$, simetric față de 0 pe axă"],
     properties: ["Pe axă numerele cresc de la stânga la dreapta: $-3<-2<-1<0<1<2$.", "Opusul lui $a$ este $-a$; opusul lui $-5$ este $5$.", "Orice număr negativ este mai mic decât orice număr pozitiv.", "Dintre două numere negative, este mai mare cel mai apropiat de 0: $-2>-5$."],
     steps: ["Trasează axa, marchează 0, adaugă o scară egală în ambele direcții.", "Numerele pozitive → la dreapta; negative → la stânga.", "Pentru comparare: cel mai la dreapta pe axă → cel mai mare.", "Opusul lui $a$: reflectă punctul față de 0."],
     tips: ["$-2>-5$ (deși $2<5$): pe axă $-2$ este mai la dreapta.", "Opusul lui 0 este 0.", "La ordonare: scrie întâi cel mai mic (cel mai la stânga pe axă)."],
