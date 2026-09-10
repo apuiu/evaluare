@@ -572,6 +572,54 @@ body {
 .tag.green { background: var(--accent-math-light);  color: var(--accent-math); }
 .tag.yellow{ background: #fffbf0; color: #8a6000; border: 1px solid #f0a500; }
 
+/* Difficulty badges for progressive exercises */
+.dif-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-right: 7px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.dif-usor      { background: #e6f9ec; color: #1a7a4a; }
+.dif-mediu     { background: #fff7e0; color: #8a6000; }
+.dif-dificil   { background: #ffece8; color: #c0392b; }
+.dif-f-dificil { background: #f3eeff; color: #7c3aed; }
+
+/* Collapsible solution under each proposed exercise */
+.rezolvare-toggle {
+  margin: 6px 0 10px;
+}
+
+.rezolvare-toggle summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+  list-style: none;
+  display: inline-block;
+}
+
+.rezolvare-toggle summary::-webkit-details-marker { display: none; }
+.rezolvare-toggle summary::before { content: "▸ "; }
+.rezolvare-toggle[open] summary::before { content: "▾ "; }
+
+.rezolvare-toggle p {
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+}
+
 /* ==========================================
    NAVIGATION BUTTONS
    ========================================== */
