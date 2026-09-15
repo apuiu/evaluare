@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin – Statistici accesare</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="admin-page">
+    <div class="admin-shell">
+
+      <div class="admin-topbar">
+        <h1>&#128202; Statistici de accesare</h1>
+        <a class="admin-back" href="index.html">&larr; Înapoi la aplicație</a>
+      </div>
+
+      <div class="admin-note" style="margin-bottom:20px;">
+        <strong>Notă importantă:</strong> site-ul este static (fără server/bază de date proprie), deci aceste
+        statistici sunt salvate <strong>local, în acest browser</strong> (localStorage) — reflectă doar vizitele
+        făcute de pe acest dispozitiv, nu totalul real al tuturor vizitatorilor site-ului. Pentru statistici
+        globale reale ar fi nevoie de un serviciu extern de analiză (ex. Google Analytics) sau de un backend propriu.
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total vizite (acest dispozitiv)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-today">0</div>
+          <div class="stat-label">Astăzi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-month">0</div>
+          <div class="stat-label">Luna aceasta</div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Vizite unice pe zi (ultimele 30 de zile)</h2>
+        <div class="admin-chart-wrap" id="chart-days"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Vizite unice pe lună (ultimele 12 luni)</h2>
+        <div class="admin-chart-wrap" id="chart-months"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

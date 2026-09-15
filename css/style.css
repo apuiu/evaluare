@@ -890,3 +890,130 @@ body {
   letter-spacing: .5px;
   margin-bottom: 6px;
 }
+
+/* ==========================================
+   ADMIN PAGE (statistici de accesare — pagină ascunsă, fără link în meniu)
+   ========================================== */
+
+.admin-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 24px 16px 60px;
+}
+
+.admin-shell {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-topbar h1 {
+  font-size: 19px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-back {
+  font-size: 13px;
+  color: var(--primary-light);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.admin-back:hover { text-decoration: underline; }
+
+.admin-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-card h2 {
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 14px;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-card .stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.stat-card .stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.admin-chart-wrap {
+  overflow-x: auto;
+}
+
+.admin-chart-wrap svg { display: block; }
+
+.admin-bar {
+  fill: var(--primary-light);
+}
+.admin-bar:hover { fill: var(--primary); }
+
+.admin-bar-label {
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+
+.admin-bar-value {
+  font-size: 10px;
+  fill: var(--primary);
+  font-weight: 700;
+}
+
+.admin-axis-line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.admin-note {
+  background: #fff9e6;
+  border-left: 4px solid #f0a500;
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  font-size: 13px;
+  color: #6b4e00;
+  line-height: 1.6;
+}
+
+.admin-empty {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 30px 10px;
+}
