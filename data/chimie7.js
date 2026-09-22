@@ -7,6 +7,11 @@
 // ─── Funcții helper (prefixate Ch7 pentru a evita coliziuni) ───
 
 const listCh7 = (items) => items.map((item) => `<li>${item}</li>`).join("\n");
+const sectionListCh7 = (title, items, ordered = false) => {
+  if (!items || !items.length) return "";
+  const tag = ordered ? "ol" : "ul";
+  return `<h4>${title}</h4><${tag}>${listCh7(items)}</${tag}>`;
+};
 
 const DIF_LABELS_CH7 = { usor: "Ușor", mediu: "Mediu", dificil: "Dificil", "f-dificil": "Foarte dificil" };
 const exListCh7 = (items) => items.map((item) => `<li><span class="dif-badge dif-${item.level}">${DIF_LABELS_CH7[item.level]}</span> ${item.text}${item.solution ? `<details class="rezolvare-toggle"><summary>Vezi rezolvarea</summary><p>${item.solution}</p></details>` : ""}</li>`).join("\n");
@@ -37,6 +42,8 @@ const lessonCh7 = (data) => `
     <div class="atentie-label">Atenție!</div>
     <ul>${listCh7(data.tips)}</ul>
   </div>
+  ${sectionListCh7("Observații și experimente simple", data.observations)}
+  ${sectionListCh7("Legături cu viața de zi cu zi", data.everyday)}
   ${solvedCh7(data.examples)}
   <h4>Exerciții propuse</h4>
   <ol>${exListCh7(data.exercises)}</ol>
@@ -54,6 +61,7 @@ const recapCh7 = (data) => `
     <div class="atentie-label">Greșeli frecvente</div>
     <ul>${listCh7(data.mistakes)}</ul>
   </div>
+  ${sectionListCh7("Aplicații și contexte utile", data.applications)}
   ${solvedCh7([data.problem])}
   <h4>Exerciții mixte</h4>
   <ol>${exListCh7(data.exercises)}</ol>
@@ -109,6 +117,16 @@ const topicsCh7 = {
       "Aerul este amestec omogen de gaze ($N_2 \\approx 78\\%$, $O_2 \\approx 21\\%$, $Ar \\approx 1\\%$).",
       "Granitul, sângele, laptele – amestecuri eterogene.",
       "Nu confunda substanță pură cu substanță simplă (ex: $O_2$ este substanță simplă, dar și pură)."
+    ],
+    observations: [
+      "Pune într-un pahar apă cu sare și într-un altul apă cu nisip. În primul caz obții un amestec uniform; în al doilea, componentele rămân distincte.",
+      "Privește cu atenție laptele, granitul sau sucul cu pulpă: unele amestecuri par uniforme de la distanță, dar la analiză mai atentă sunt eterogene.",
+      "Compară o probă de zahăr cristalizat cu o soluție de zahăr: aceeași substanță poate apărea fie ca substanță pură, fie ca parte a unui amestec."
+    ],
+    everyday: [
+      "În bucătărie, siropul, oțetul și aerul din cameră sunt exemple de amestecuri omogene.",
+      "Apa tulbure, salata cu dressing neomogen și betonul proaspăt sunt exemple de amestecuri eterogene.",
+      "Apa distilată este folosită în laboratoare și uneori la baterii sau fiare de călcat pentru că impuritățile trebuie controlate."
     ],
     examples: [
       {
@@ -170,6 +188,16 @@ const topicsCh7 = {
       "Eterogen lichid + lichid nemiscibile → decantare cu pâlnie separatoare.",
       "Omogen lichid + lichid miscibile → distilare.",
       "Omogen solid dizolvat în lichid → cristalizare sau evaporare."
+    ],
+    observations: [
+      "Filtrarea unei ape cu nisip arată clar diferența dintre un solid insolubil și o substanță dizolvată: nisipul rămâne pe filtru, sarea nu.",
+      "Lasă un amestec de apă cu ulei în repaus și observă formarea straturilor: separarea începe chiar înainte de decantare.",
+      "Evaporarea lentă a unei soluții de sare lasă cristale vizibile, ceea ce face ușor de înțeles ideea de cristalizare."
+    ],
+    everyday: [
+      "Strecurarea supei sau a ceaiului folosește același principiu ca filtrarea din laborator.",
+      "Obținerea apei potabile din surse sărate sau contaminate folosește etape de separare și purificare inspirate din metodele studiate aici.",
+      "Separarea smântânii sau a componentelor din sânge în laborator se bazează pe centrifugare."
     ],
     tips: [
       "Filtrare: solidul rămâne pe filtru (reziduu); lichidul trece (filtrat).",
@@ -243,6 +271,16 @@ const topicsCh7 = {
       "$T_t$ gheață = 0°C; $T_f$ apă = 100°C (la 1 atm).",
       "Valori de referință: $\\rho_{Fe}=7{,}9$ g/cm³; $\\rho_{Al}=2{,}7$ g/cm³; $\\rho_{Au}=19{,}3$ g/cm³."
     ],
+    observations: [
+      "Măsoară masa unui obiect mic și volumul apei deplasate într-un cilindru gradat: obții experimental densitatea lui.",
+      "Compară topirea gheții cu arderea unei bucăți de hârtie: primul proces schimbă doar starea, al doilea schimbă substanța.",
+      "Observă cum uleiul rămâne deasupra apei: diferența de densitate explică ordinea straturilor."
+    ],
+    everyday: [
+      "Densitatea explică de ce bărcile plutesc și de ce uleiul rămâne la suprafața supei.",
+      "Punctele de topire și fierbere sunt importante în alegerea materialelor pentru gătit, construcții sau instalații.",
+      "Solubilitatea este folosită când preparăm ceai, sirop, medicamente lichide sau soluții de curățare."
+    ],
     examples: [
       {
         label: "densitate",
@@ -315,6 +353,16 @@ const topicsCh7 = {
       "Neutronii nu au sarcină electrică.",
       "Electronii se află în afara nucleului, în învelișul electronic."
     ],
+    observations: [
+      "Modelele cu bile colorate sau desenele concentrice ajută la separarea clară între nucleu și înveliș electronic.",
+      "Dacă schimbi numărul de protoni, obții alt element; dacă schimbi doar numărul de neutroni, rămâi la același element, dar cu alt izotop.",
+      "În majoritatea problemelor școlare, masa electronilor este neglijată pentru că aproape toată masa se află în nucleu."
+    ],
+    everyday: [
+      "Toate materialele din jurul nostru, de la apă la metal și aer, sunt alcătuite din atomi sau particule formate din atomi.",
+      "În medicină și tehnologie, cunoașterea structurii atomului stă la baza imagisticii, electronicii și materialelor moderne.",
+      "Bateriile, LED-urile și ecranele funcționează datorită comportamentului electronilor în atomi și materiale."
+    ],
     examples: [
       {
         label: "sodiu",
@@ -380,6 +428,16 @@ const topicsCh7 = {
       "K, Na, Fe, Au, Pb, Cu, Hg – simboluri din limbile latină sau germană.",
       "Substanțele simple ale nemetalelor gazoase sunt diatomice: $H_2$, $O_2$, $N_2$, $F_2$, $Cl_2$.",
       "Nu confundați elementul cu substanța simplă la examen!"
+    ],
+    observations: [
+      "Pe ambalaje, în tabele nutriționale sau pe etichete medicale apar des simboluri chimice precum Na, Ca, Fe sau I.",
+      "Elementele din aceeași categorie nu arată mereu la fel, dar au trăsături generale comune: metalele conduc bine, nemetalele mai slab.",
+      "Când spui oxigen din aer, te referi de obicei la substanța simplă $O_2$, nu la simbolul O al elementului."
+    ],
+    everyday: [
+      "Fierul din sânge, calciul din oase, iodul din sare și sodiu din alimente sunt exemple de elemente importante pentru viață.",
+      "Simbolurile chimice sunt folosite internațional, deci ajută la citirea etichetelor și informațiilor științifice indiferent de limbă.",
+      "Recunoașterea metalelor și nemetalelor ajută la înțelegerea utilizărilor lor: cuprul la cabluri, oxigenul în respirație, clorul la dezinfectare."
     ],
     examples: [
       {
@@ -447,6 +505,16 @@ const topicsCh7 = {
       "Gazele nobile (grupa 18): 8 electroni de valență (excepție He cu 2) → stabile chimic.",
       "Halogenii (grupa 17): 7 electroni de valență → reacționează puternic cu metalele."
     ],
+    observations: [
+      "Când urmărești tabelul periodic de la stânga la dreapta, observi trecerea treptată de la elemente metalice la nemetale.",
+      "Elementele din aceeași coloană au comportamente asemănătoare tocmai pentru că ultimul strat electronic este organizat similar.",
+      "Perioadele arată creșterea complexității atomilor prin apariția unor straturi electronice noi."
+    ],
+    everyday: [
+      "Tabelul periodic este folosit de chimiști, medici, farmaciști, ingineri și profesori ca hartă de bază a materiei.",
+      "Poziția unui element oferă rapid indicii despre reactivitate și utilizări, de exemplu de ce sodiul este foarte reactiv, iar argonul este inert.",
+      "În industrie, alegerea unui material potrivit pornește adesea de la familia din care face parte elementul."
+    ],
     examples: [
       {
         label: "localizare clor",
@@ -511,6 +579,16 @@ const topicsCh7 = {
       "Hidrogen are 3 izotopi: $^1H$ (protiu), $^2H$ (deuteriu), $^3H$ (tritiu).",
       "Izotop ≠ izobar: la izobari A egal, Z diferit (ex: $^{14}C$ și $^{14}N$).",
       "La calculul masei medii, convertiți procentele în fracții ($\\div 100$)."
+    ],
+    observations: [
+      "Pe modelul aceluiași element, schimbarea neutronilor nu modifică poziția în tabelul periodic, dar schimbă masa atomului.",
+      "Diferențele dintre izotopi sunt invizibile cu ochiul liber, dar pot fi detectate prin măsurări precise de masă sau radiație.",
+      "Masa atomică din tabelul periodic nu este de obicei număr întreg tocmai pentru că reprezintă o medie a izotopilor naturali."
+    ],
+    everyday: [
+      "Deuteriul este folosit în unele aplicații științifice, iar radioizotopii au utilizări în medicină și cercetare.",
+      "Carbonul-14 este cunoscut pentru datarea materialelor vechi, iar iodul radioactiv este folosit în anumite investigații medicale.",
+      "Faptul că masa atomică este medie explică de ce valorile din tabelul periodic nu coincid perfect cu numerele de masă ale unor atomi individuali."
     ],
     examples: [
       {
@@ -581,6 +659,16 @@ const topicsCh7 = {
       "Dacă ultimul strat are 8e (sau 2e pentru He) → stabil (gaz nobil).",
       "Metal: puțini electroni de valență (1–3); nemetal: mulți (4–7)."
     ],
+    observations: [
+      "Modelele cu cercuri concentrice sau cartonașe cu electroni fac vizibilă ideea de completare treptată a straturilor K, L și M.",
+      "Comparând Na, Mg și Cl se vede clar cum numărul de electroni de valență influențează tendința atomului de a ceda sau accepta electroni.",
+      "Gazele nobile sunt exemple bune de stabilitate: ele au stratul exterior complet și reacționează foarte greu."
+    ],
+    everyday: [
+      "Reactivitatea materialelor folosite zilnic depinde de electronii de valență ai elementelor din compoziția lor.",
+      "Înțelegerea configurației electronice explică de ce unele elemente sunt stabile, iar altele reacționează ușor în aer sau în apă.",
+      "Bateriile și circuitele electrice folosesc materiale alese tocmai pentru comportamentul electronilor lor exteriori."
+    ],
     examples: [
       {
         label: "sodiu",
@@ -646,6 +734,16 @@ const topicsCh7 = {
       "Sarcini egale → indicii 1:1 (ex: NaCl, MgO, CaS).",
       "Al³⁺ și O²⁻ → MCM(3,2)=6 → Al₂O₃ (2×3=6; 3×2=6 ✓).",
       "Compușii ionici nu sunt moleculare – nu există molecule izolate de NaCl."
+    ],
+    observations: [
+      "Folosind mărgele sau discuri colorate pentru ioni se observă ușor cum neutralitatea electrică obligă la anumite rapoarte între cationi și anioni.",
+      "Cristalele de sare de bucătărie oferă un exemplu concret de substanță ionică solidă cu rețea ordonată.",
+      "Diferența dintre solidul ionic și soluția sa se vede practic prin conductibilitate: în soluție ionii pot circula, în cristal nu."
+    ],
+    everyday: [
+      "Sarea de bucătărie, creta și multe minerale sunt substanțe ionice întâlnite frecvent în viața de zi cu zi.",
+      "Fertilizatorii și unele medicamente conțin compuși ionici aleși pentru solubilitate și reactivitate controlată.",
+      "Dizolvarea sărurilor în apă este esențială în agricultură, alimentație și procese biologice."
     ],
     examples: [
       {
@@ -714,6 +812,16 @@ const topicsCh7 = {
       "Legătura polară: atomul mai electronegativ atrage mai puternic perechea de electroni.",
       "CO₂ are 2 legături duble (O=C=O) și este nepolară datorită simetriei."
     ],
+    observations: [
+      "Modelele moleculare arată clar că o legătură covalentă reprezintă o pereche de electroni pusă în comun, nu un transfer complet de electroni.",
+      "Comparând $H_2$, $O_2$ și $N_2$ se vede cum crește numărul de perechi comune de la legătură simplă la dublă și triplă.",
+      "Moleculele simetrice, ca $CO_2$, ajută la înțelegerea diferenței dintre legături polare și molecule nepolare."
+    ],
+    everyday: [
+      "Apa, oxigenul și dioxidul de carbon sunt exemple familiare de substanțe cu legături covalente.",
+      "Proprietățile apei, atât de importante pentru viață, depind de legăturile covalente din moleculă și de polaritatea ei.",
+      "Materialele plastice, zaharurile și multe substanțe organice sunt alcătuite în principal din legături covalente."
+    ],
     examples: [
       {
         label: "H₂",
@@ -779,6 +887,16 @@ const topicsCh7 = {
       "Nu modifica indicii din formulele chimice standard (ex: nu schimba $H_2O$ în $H_4O_2$).",
       "La $Fe_2O_3$: Fe are valența III, O are valența II → MCM(3,2)=6 → Fe₂O₃.",
       "La compuși cu radicali (OH⁻, SO₄²⁻, NO₃⁻): pune radicalul în paranteză dacă indicele > 1."
+    ],
+    observations: [
+      "Exercițiile cu valențe devin mai clare dacă sunt verificate mereu prin egalitatea totală a valențelor pozitive și negative.",
+      "Folosirea parantezelor la radicali se vede imediat în exemple precum $Ca(OH)_2$ sau $Al_2(SO_4)_3$.",
+      "Compararea unei formule corecte cu una nesimplificată, cum ar fi $MgO$ față de $Mg_2O_2$, fixează ideea de raport minim."
+    ],
+    everyday: [
+      "Citirea formulelor chimice apare pe etichete de îngrășăminte, suplimente minerale, detergenți sau materiale de construcție.",
+      "Formulele corecte sunt necesare în laborator, farmacie și industrie pentru a evita confuzii între substanțe diferite.",
+      "Înțelegerea valenței ajută elevul să treacă mai ușor de la simboluri la reacții chimice complete."
     ],
     examples: [
       {
@@ -849,6 +967,16 @@ const topicsCh7 = {
       "Reversibilitate ≠ criteriu absolut: unele reacții chimice sunt reversibile.",
       "Ghid rapid: apar substanțe noi? → reacție chimică."
     ],
+    observations: [
+      "Topirea gheții și dizolvarea zahărului sunt experimente simple care arată că o substanță își poate schimba aspectul fără să devină altă substanță.",
+      "Amestecul de bicarbonat și oțet este un bun exemplu vizual de reacție chimică, deoarece apar imediat bule de gaz.",
+      "Ruginirea lentă a fierului arată că unele reacții chimice nu sunt spectaculoase, dar produc totuși substanțe noi."
+    ],
+    everyday: [
+      "Gătitul, arderea combustibililor și alterarea alimentelor includ numeroase transformări chimice.",
+      "Topirea untului, evaporarea apei de pe rufe sau solidificarea ciocolatei sunt transformări fizice observabile zilnic.",
+      "Diferențierea corectă între cele două tipuri de transformări ajută la înțelegerea proceselor din bucătărie, industrie și natură."
+    ],
     examples: [
       {
         label: "fizică vs. chimică",
@@ -914,6 +1042,16 @@ const topicsCh7 = {
       "Nu schimba indicii din formulele chimice – modifică numai coeficienții.",
       "Dacă apar fracții, înmulțești toți coeficienții cu numitorul fracției.",
       "Verifică mereu la final numărând fiecare element."
+    ],
+    observations: [
+      "Pe fișă sau tablă, numărarea separată a atomilor din stânga și din dreapta face imediat vizibil de ce ecuația trebuie echilibrată.",
+      "Cele mai frecvente greșeli apar când elevul încearcă să schimbe indicii formulelor în locul coeficienților.",
+      "Reacțiile simple de ardere sunt un teren bun pentru exersarea echilibrării înainte de exemple mai complexe."
+    ],
+    everyday: [
+      "Ecuațiile chimice sunt limbajul prin care descriem arderea gazului la aragaz, ruginirea metalelor sau reacțiile din organism.",
+      "Echilibrarea corectă este importantă în industrie pentru a calcula materiile prime și cantitățile de produse obținute.",
+      "În laborator, o ecuație scrisă greșit poate duce la concluzii greșite despre raportul dintre substanțe."
     ],
     examples: [
       {
@@ -982,6 +1120,16 @@ const topicsCh7 = {
       "Masa molară se calculează adunând $A_r$ ale tuturor atomilor din formulă.",
       "Verificare: $m_{\text{reactanți}} = m_{produse}$."
     ],
+    observations: [
+      "Dacă o reacție are loc într-un vas închis, masa totală măsurată înainte și după reacție rămâne aceeași.",
+      "În vase deschise, impresia de pierdere sau creștere a masei apare pentru că unele gaze ies sau intră din sistemul observat.",
+      "Problemele de calcul devin mai clare când separi pașii: ecuație echilibrată, moli, apoi masă."
+    ],
+    everyday: [
+      "Legea conservării masei stă la baza calculelor din industrie, alimentație, farmacie și protecția mediului.",
+      "Când un metal ruginește, masa lui crește deoarece se combină cu oxigen din aer, nu pentru că materia apare din nimic.",
+      "Dozarea ingredientelor în procese chimice reale depinde de relațiile cantitative dintre reactanți și produși."
+    ],
     examples: [
       {
         label: "bilanț simplu",
@@ -1042,6 +1190,16 @@ const topicsCh7 = {
       "Descompunere: 1 reactant → mai mulți produși.",
       "Element simplu apare sau dispare → substituție.",
       "Doi compuși ionici schimbă parteneri → schimb ionic."
+    ],
+    observations: [
+      "Clasificarea reacțiilor devine mai ușoară dacă urmărești mai întâi forma generală a ecuației și abia apoi substanțele implicate.",
+      "Experimentele cu precipitate sau degajări de gaze fac foarte clară reacția de schimb ionic.",
+      "Compararea unei reacții de sinteză cu una de descompunere arată imediat că una construiește un compus, iar cealaltă îl separă."
+    ],
+    everyday: [
+      "Arderea combustibililor este un exemplu comun de reacție de combinare cu oxigenul.",
+      "Formarea depunerilor sau a unor precipitate apare în tratarea apei și în anumite procese casnice sau industriale.",
+      "Reacțiile de substituție explică de ce unele metale pot proteja altele sau pot fi folosite pentru extragerea unor substanțe din soluții."
     ],
     tips: [
       "Combustia completă a compușilor cu C și H → $CO_2 + H_2O$.",
@@ -1125,6 +1283,16 @@ const topicsCh7 = {
       "CO și NO sunt indiferenți – excepții importante de memorat.",
       "Anhidridă = oxid acid (termeni echivalenți)."
     ],
+    observations: [
+      "Clasificarea oxizilor devine mai clară dacă pornești de la natura elementului legat de oxigen: metal sau nemetal.",
+      "Compararea unor exemple precum $CaO$, $CO_2$ și $Al_2O_3$ ajută la observarea diferenței dintre oxizi bazici, acizi și amfoteri.",
+      "Arderea unui metal și arderea unui nemetal pot fi folosite ca punct de plecare pentru înțelegerea modului de formare a oxizilor."
+    ],
+    everyday: [
+      "Rugina, varul, dioxidul de carbon și multe gaze rezultate la ardere sunt exemple de oxizi întâlniți frecvent.",
+      "Oxizii apar în construcții, respirație, poluare și procese industriale, deci nu sunt doar noțiuni de laborator.",
+      "Înțelegerea lor ajută la legarea reacțiilor de ardere de substanțele reale din jurul nostru."
+    ],
     examples: [
       {
         label: "oxid metalic",
@@ -1183,6 +1351,16 @@ const topicsCh7 = {
       "Reacție cu apă: $MO + H_2O \\rightarrow M(OH)_2$.",
       "Reacție cu acid: $MO + 2HCl \\rightarrow MCl_2 + H_2O$.",
       "Verificați echilibrarea fiecărei ecuații."
+    ],
+    observations: [
+      "Reacția dintre $CaO$ și apă este un exemplu foarte bun de transformare exotermă observabilă direct.",
+      "Culoarea diferită a unor oxizi și săruri, cum este cazul $CuO$ și $CuSO_4$, oferă indicii vizuale utile în laborator.",
+      "Nu toți oxizii metalici se comportă identic; comparația dintre $CaO$ și $Fe_2O_3$ fixează această idee."
+    ],
+    everyday: [
+      "Varul este folosit în construcții, iar reacțiile lui explică întărirea unor materiale tradiționale.",
+      "Oxizii metalici apar în minereuri, pigmenți și straturi de coroziune de pe obiecte metalice.",
+      "Înțelegerea reactivității lor ajută la explicarea proceselor de protecție sau degradare a metalelor."
     ],
     tips: [
       "Var nestins = $CaO$; var stins = $Ca(OH)_2$; $CaO + H_2O \\rightarrow Ca(OH)_2$ (exotermă).",
@@ -1248,6 +1426,16 @@ const topicsCh7 = {
       "Reacție cu apa: $oxid\\,acid + H_2O \\rightarrow acid$.",
       "Reacție cu baza: $oxid\\,acid + 2MOH \\rightarrow M_2A + H_2O$.",
       "Echilibrați ecuațiile."
+    ],
+    observations: [
+      "Arderea sulfului și dizolvarea unor gaze în apă arată concret cum apar oxizi acizi și de ce influențează mediul.",
+      "Reacția dintre $CO_2$ și apa de var este un exemplu simplu care leagă noțiunea de oxid acid de o observație vizuală clară.",
+      "Compararea $CO_2$ cu $SO_3$ evidențiază faptul că nu toți oxizii acizi au aceeași intensitate a efectelor chimice."
+    ],
+    everyday: [
+      "Oxizii nemetalici apar în gaze de ardere, băuturi carbogazoase și fenomene de poluare atmosferică.",
+      "Ploaia acidă și efectele ei asupra vegetației și clădirilor sunt exemple directe ale importanței acestor compuși.",
+      "Dioxidul de carbon este prezent atât în respirație, cât și în fotosinteză și în echilibrul climatic."
     ],
     tips: [
       "$CO_2 + H_2O \\rightarrow H_2CO_3$ (acid carbonic, slab, instabil – se descompune rapid).",
@@ -1326,6 +1514,16 @@ const topicsCh7 = {
       "$H_2SO_4$ concentrat: se diluează turnând ACID în APĂ, nu invers (reacție puternic exotermă).",
       "Acidul din stomac este $HCl$; acidul din oțet este $CH_3COOH$."
     ],
+    observations: [
+      "Indicatorii acido-bazici fac foarte ușor observabil caracterul acid al unei soluții prin schimbarea culorii.",
+      "Compararea oțetului cu acidul clorhidric arată diferența dintre un acid slab utilizat uzual și un acid tare, coroziv.",
+      "Denumirile acizilor devin mai ușor de reținut când sunt legate de radicalul sau elementul central din formulă."
+    ],
+    everyday: [
+      "Acizii apar în stomac, în alimente, în baterii și în multe produse de curățare sau industriale.",
+      "În viața de zi cu zi trebuie înțelese atât utilitatea, cât și pericolul acizilor concentrați.",
+      "Noțiunea de pH este folosită frecvent în sănătate, agricultură, industrie alimentară și protecția mediului."
+    ],
     examples: [
       {
         label: "hidracid",
@@ -1390,6 +1588,16 @@ const topicsCh7 = {
       "Cu și Ag nu reacționează cu $HCl$ diluat sau $H_2SO_4$ diluat.",
       "Neutralizare: produsele sunt întotdeauna sare + apă.",
       "Schimbarea de culoare $CuO$ (negru) → $CuSO_4$ (albastru) vizibilă la reacția cu $H_2SO_4$."
+    ],
+    observations: [
+      "Degajarea de bule la reacția acid-metal este una dintre cele mai clare dovezi experimentale ale reacției chimice.",
+      "Neutralizarea poate fi urmărită cu indicatori de pH, care arată trecerea de la acid spre neutru.",
+      "Exemplele cu cupru și zinc ajută la înțelegerea rolului seriei activității metalelor."
+    ],
+    everyday: [
+      "Curățarea depunerilor de calcar cu produse acide se bazează pe reactivitatea acizilor cu anumite săruri și oxizi.",
+      "În industrie, reacțiile acizilor sunt folosite la decaparea metalelor, obținerea sărurilor și reglarea pH-ului.",
+      "Noțiunea de neutralizare apare și în tratarea apelor sau în corectarea solurilor prea acide."
     ],
     examples: [
       {
@@ -1462,6 +1670,16 @@ const topicsCh7 = {
       "Ca(OH)₂ este utilizat în construcții (tencuiala), dezinfecție, industria alimentară.",
       "Fenolftaleina: incoloră → roz în prezența bazei = schimbare de culoare vizuală dramatică."
     ],
+    observations: [
+      "Indicatorii, mai ales fenolftaleina, oferă un semnal vizual foarte clar pentru identificarea unei baze.",
+      "Compararea bazelor solubile cu precipitatele de hidroxizi insolubili ajută la fixarea ideii de solubilitate.",
+      "Formula generală $M(OH)_n$ devine intuitivă atunci când este legată de valența metalului."
+    ],
+    everyday: [
+      "Bazele apar în detergenți, soluții de curățare, materiale de construcții și procese industriale.",
+      "Soda caustică este utilă, dar periculoasă, ceea ce face importantă înțelegerea caracterului coroziv al bazelor tari.",
+      "Apa de var și varul stins sunt exemple familiare din gospodărie și construcții."
+    ],
     examples: [
       {
         label: "formula bazei",
@@ -1526,6 +1744,16 @@ const topicsCh7 = {
       "Descompunere $Cu(OH)_2$: albastru → $CuO$ negru (schimbare de culoare vizibilă).",
       "$Al(OH)_3$ este amfoter: reacționează cu $HCl$ (acid) ȘI cu $NaOH$ (baza).",
       "Nu confundați $CaO$ (var nestins, oxid) cu $Ca(OH)_2$ (var stins, baza)."
+    ],
+    observations: [
+      "Tulburarea apei de var la trecerea $CO_2$ este unul dintre cele mai bune exemple de test chimic ușor de observat.",
+      "Descompunerea termică a unor hidroxizi oferă și un indiciu de culoare, nu doar o ecuație pe hârtie.",
+      "Reacțiile bazelor sunt mai ușor de înțeles dacă sunt comparate direct cu reacțiile acizilor studiate anterior."
+    ],
+    everyday: [
+      "Neutralizarea bazelor și reacțiile lor cu gaze acide au aplicații în tratarea apelor și în procese de depoluare.",
+      "Apa de var este folosită didactic pentru identificarea dioxidului de carbon și are și utilizări practice în construcții.",
+      "Bazele insolubile și precipitatele lor apar în analize chimice și în procese de purificare."
     ],
     examples: [
       {
@@ -1596,6 +1824,16 @@ const topicsCh7 = {
       "$CaCO_3$ = calcarul, marmura, creta – insolubil, prezent în natură.",
       "La $Al_2(SO_4)_3$: sulfatul se pune în paranteză cu indicele 3."
     ],
+    observations: [
+      "Exemplele concrete de săruri naturale sau alimentare ajută la diferențierea dintre formulă, denumire și tipul sării.",
+      "Compararea unei sări medii cu o sare acidă, cum sunt $Na_2CO_3$ și $NaHCO_3$, clarifică foarte bine clasificarea.",
+      "Regula neutralității electrice rămâne cea mai sigură verificare pentru formula corectă a unei sări."
+    ],
+    everyday: [
+      "Sărurile apar în alimentație, agricultură, construcții, geologie și medicină.",
+      "Bicarbonatul de sodiu, sarea de bucătărie și calcarul sunt exemple ușor recognoscibile pentru elevi.",
+      "Recunoașterea tipurilor de săruri ajută la înțelegerea produselor comerciale și a materialelor naturale."
+    ],
     examples: [
       {
         label: "formula sării",
@@ -1655,6 +1893,16 @@ const topicsCh7 = {
       "Scrie formulele corecte ale reactanților și produselor.",
       "Echilibrează ecuația.",
       "Verifică dacă reacția are loc (precipitat ↓, gaz ↑, sau apă → reacție completă)."
+    ],
+    observations: [
+      "Obținerea sărurilor este mai ușor de înțeles când aceeași substanță este produsă prin metode diferite și apoi comparată.",
+      "Precipitatele, gazele degajate și schimbările de culoare oferă indicii bune pentru recunoașterea metodei folosite.",
+      "Neutralizarea și precipitare sunt două trasee foarte utile pentru a lega teoria de practică."
+    ],
+    everyday: [
+      "Multe săruri utilizate curent se obțin industrial prin reacții de neutralizare sau prin procese de precipitare.",
+      "Purificarea apei, fabricarea îngrășămintelor și obținerea unor materiale folosesc reacții de formare a sărurilor.",
+      "În laborator, alegerea metodei depinde de solubilitatea produsului și de siguranța reactanților."
     ],
     tips: [
       "Neutralizarea acid-baza: cea mai versatilă metodă, dă săruri solubile.",
@@ -1731,6 +1979,16 @@ const topicsCh7 = {
       "Gheața plutește datorită anomaliei densității – fenomen esențial pentru viața acvatică pe timp de iarnă.",
       "Vaporii de apă sunt incolori – 'aburul' vizibil este de fapt picături fine de apă lichidă."
     ],
+    observations: [
+      "Plutirea gheții și comportamentul picăturilor pe suprafețe oferă exemple vizibile pentru proprietățile speciale ale apei.",
+      "Compararea apei distilate cu ape minerale sau de la robinet clarifică rolul substanțelor dizolvate.",
+      "Reacțiile apei cu metale active sau cu oxizi fac legătura dintre proprietățile ei fizice și rolul chimic."
+    ],
+    everyday: [
+      "Apa influențează direct clima, organismul uman, agricultura și toate procesele casnice importante.",
+      "Faptul că gheața plutește protejează viața din lacuri și râuri iarna.",
+      "Proprietățile apei explică de ce este atât de importantă în spălare, gătit, transportul substanțelor și reglarea temperaturii."
+    ],
     examples: [
       {
         label: "reacția cu sodiul",
@@ -1797,6 +2055,16 @@ const topicsCh7 = {
       "Agitarea și încălzirea grăbesc dizolvarea, dar nu schimbă concentrația finală a unei soluții date.",
       "O soluție diluată are mult solvent și puțin solvat; una concentrată, invers."
     ],
+    observations: [
+      "Dizolvarea sării sau zahărului în apă este un experiment simplu pentru definirea soluției și a rolului solventului.",
+      "Diferența dintre o soluție saturată și una nesaturată se observă clar atunci când o parte din solvat rămâne nedizolvată.",
+      "Calculele de concentrație devin mai intuitive când sunt legate de exemple concrete de siropuri sau soluții saline."
+    ],
+    everyday: [
+      "Concentrația soluțiilor este relevantă în medicamente, băuturi, produse de curățare și în laborator.",
+      "Apa este solventul principal în organism, în industrie și în majoritatea activităților casnice.",
+      "Înțelegerea solubilității explică de ce unele substanțe se dizolvă ușor, iar altele, precum uleiul, rămân separate."
+    ],
     examples: [
       {
         label: "calcul concentrație",
@@ -1862,6 +2130,16 @@ const topicsCh7 = {
       "Clorinarea excesivă poate da apei un miros/gust neplăcut, dar este necesară pentru siguranță sanitară.",
       "Fierberea apei distruge multe microorganisme, dar nu elimină poluanții chimici (metale grele, nitrați).",
       "Economisirea apei este esențială – resursele de apă dulce ușor accesibile sunt limitate."
+    ],
+    observations: [
+      "Un experiment de filtrare simplă arată bine ce tip de impurități pot fi îndepărtate și care rămân dizolvate în apă.",
+      "Comparația dintre apă limpede, apă murdară și apă tratată ajută la înțelegerea diferenței dintre aspect și siguranță sanitară.",
+      "Depunerile de calcar din ceainice sau fierbătoare sunt observații casnice bune pentru noțiunea de duritate a apei."
+    ],
+    everyday: [
+      "Calitatea apei potabile influențează direct sănătatea, igiena și costurile de întreținere a aparatelor casnice.",
+      "Protejarea surselor de apă este o problemă locală și globală, nu doar un subiect teoretic de mediu.",
+      "Procesul de tratare a apei explică de ce infrastructura publică este esențială pentru viața modernă."
     ],
     examples: [
       {
@@ -1932,6 +2210,16 @@ const topicsCh7 = {
       "Argonul este cel mai abundent dintre gazele rare din aer (~0,93%).",
       "Creșterea concentrației de $CO_2$ din activități umane amplifică efectul de seră natural."
     ],
+    observations: [
+      "Experimentele cu lumânare în vas închis ilustrează simplu rolul oxigenului în ardere.",
+      "Compararea proporțiilor de azot și oxigen ajută la înțelegerea faptului că gazul esențial pentru ardere nu este și cel majoritar.",
+      "Schimbările de umiditate și condens de pe suprafețe reci arată că și vaporii de apă fac parte din aer."
+    ],
+    everyday: [
+      "Compoziția aerului este legată direct de respirație, climă, incendii, sănătate și poluare.",
+      "În spații închise, calitatea aerului influențează confortul și siguranța oamenilor.",
+      "Noțiunea de efect de seră apare constant în discuțiile despre schimbări climatice și energie."
+    ],
     examples: [
       {
         label: "compoziția aerului",
@@ -1998,6 +2286,16 @@ const topicsCh7 = {
       "Nu stinge niciodată un incendiu electric cu apă – riscul de electrocutare!",
       "Stingătoarele cu $CO_2$ funcționează prin înlăturarea oxigenului (comburantului) din zona incendiului."
     ],
+    observations: [
+      "Culoarea flăcării este un indiciu imediat pentru diferența dintre ardere completă și ardere incompletă.",
+      "Triunghiul focului devine foarte ușor de înțeles când fiecare factor este analizat separat într-un scenariu concret.",
+      "Exemplele de stingere arată că aceeași reacție poate fi oprită prin căi diferite, în funcție de context."
+    ],
+    everyday: [
+      "Regulile de prevenire și stingere a incendiilor se bazează direct pe noțiunile din această lecție.",
+      "Aragazul, sobele, motoarele și centralele termice funcționează pe principii de oxidare și ardere.",
+      "Pericolul monoxidului de carbon face importantă ventilarea corectă și verificarea instalațiilor de ardere."
+    ],
     examples: [
       {
         label: "ardere completă",
@@ -2063,6 +2361,16 @@ const topicsCh7 = {
       "Panourile solare și turbinele eoliene nu eliberează poluanți la generarea energiei, spre deosebire de centralele pe combustibili fosili.",
       "Filtrele catalitice de la autovehicule reduc emisiile de $NO_x$ și $CO$ eliberate în atmosferă."
     ],
+    observations: [
+      "Compararea fumului rezultat din arderea diferiților combustibili oferă indicii despre cantitatea de particule și despre calitatea arderii.",
+      "Exemplele de precipitații acide sau depuneri negre pe clădiri fac vizibil impactul poluării atmosferice.",
+      "Legătura dintre tipul combustibilului și poluanții produși devine mai clară atunci când se compară cărbunele, benzina și gazul metan."
+    ],
+    everyday: [
+      "Transportul, încălzirea locuințelor și producția de energie depind încă mult de combustibili și influențează direct calitatea aerului.",
+      "Alegerea unor surse mai curate sau regenerabile are efecte reale asupra sănătății și mediului.",
+      "Poluarea aerului este o temă apropiată de elevi pentru că afectează orașele, traficul și condițiile de viață zilnice."
+    ],
     examples: [
       {
         label: "clasificare combustibili",
@@ -2124,6 +2432,11 @@ const recapTopicsCh7 = {
       "Distilare ≠ evaporare: distilarea recuperează solventul; evaporarea recuperează solvatul.",
       "Proprietățile fizice ≠ chimice: topirea este fizică; arderea este chimică."
     ],
+    applications: [
+      "Alegerea metodei corecte de separare apare în tratarea apei, în industria alimentară și în laborator.",
+      "Densitatea este folosită la identificarea materialelor și la explicarea plutirii sau sedimentării.",
+      "Diferența dintre substanță pură și amestec este esențială când evaluăm puritatea unui medicament, combustibil sau reagent de laborator."
+    ],
     problem: {
       label: "evaluare unitate 1",
       given: "3 probe: apă distilată, saramură (apă + $NaCl$), nisip cu apă",
@@ -2161,6 +2474,11 @@ const recapTopicsCh7 = {
       "Electronii nu sunt în nucleu; masa lor este neglijabilă față de nucleu.",
       "Substanța simplă ≠ elementul chimic: $O_2$ ≠ O."
     ],
+    applications: [
+      "Înțelegerea structurii atomului și a tabelului periodic stă la baza studiului reacțiilor chimice din unitățile următoare.",
+      "Simbolurile chimice și poziția în tabel sunt folosite permanent în formule, ecuații și interpretarea proprietăților substanțelor.",
+      "Izotopii au aplicații în medicină, arheologie și energie, ceea ce arată că noțiunea nu este doar teoretică."
+    ],
     problem: {
       label: "evaluare unitate 2",
       given: "$^{40}_{20}Ca$",
@@ -2196,6 +2514,11 @@ const recapTopicsCh7 = {
       "La formula ionică: simplificați indicii (Mg₂O₂ → MgO).",
       "NaCl nu este moleculă – este rețea cristalină ionică.",
       "Indicele 1 nu se scrie: NaCl, nu Na₁Cl₁."
+    ],
+    applications: [
+      "Această unitate leagă structura atomului de formule și proprietăți, pregătind direct scrierea reacțiilor chimice.",
+      "În viața reală, diferența dintre compușii ionici și cei covalenți explică solubilitatea, conductibilitatea și multe utilizări practice ale substanțelor.",
+      "Citirea corectă a valențelor și formularea compușilor este necesară în toate unitățile despre oxizi, acizi, baze și săruri."
     ],
     problem: {
       label: "evaluare U3",
@@ -2233,6 +2556,11 @@ const recapTopicsCh7 = {
       "Masa molară $H_2O$ = 18 g/mol (nu 16): $2 \\times 1 + 16 = 18$.",
       "Coeficientul 1 nu se scrie în ecuație."
     ],
+    applications: [
+      "Această unitate este baza pentru toate calculele chimice ulterioare: fără ecuații echilibrate nu se pot face raționamente cantitative corecte.",
+      "Clasificarea reacțiilor ajută elevul să recunoască mai repede ce se întâmplă într-o situație practică sau experimentală.",
+      "Legea conservării masei și tipurile de reacții sunt folosite constant în industrie, laborator și în explicarea proceselor naturale."
+    ],
     problem: {
       label: "evaluare U4",
       given: "$4Al + 3O_2 \\rightarrow 2Al_2O_3$; 54 g Al",
@@ -2268,6 +2596,11 @@ const recapTopicsCh7 = {
       "$Fe_2O_3$ nu reacționează direct cu apa rece – nu scrie $Fe_2O_3 + H_2O \\rightarrow Fe(OH)_3$ spontan.",
       "Anhidridă = oxid acid (nu orice oxid este anhidridă).",
       "Nu confundați $CaO$ (var nestins) cu $Ca(OH)_2$ (var stins)."
+    ],
+    applications: [
+      "Unitatea despre oxizi face legătura dintre ardere, poluare și clasele de substanțe studiate ulterior.",
+      "Recunoașterea oxizilor bazici și acizi este utilă pentru înțelegerea reacțiilor cu apa, acizii și bazele.",
+      "Exemplele reale precum varul, dioxidul de carbon și oxizii poluanți justifică importanța practică a temei."
     ],
     problem: {
       label: "evaluare U5",
@@ -2305,6 +2638,11 @@ const recapTopicsCh7 = {
       "Turnesol → roșu în acizi; albastru în baze (nu invers!).",
       "Acid fosforic are 3 H: $H_3PO_4$, nu $HPO_4$."
     ],
+    applications: [
+      "Acizii sunt importanți atât pentru procese biologice și alimentare, cât și pentru numeroase aplicații industriale.",
+      "Recunoașterea reacțiilor tipice ale acizilor ajută la înțelegerea obținerii sărurilor și a neutralizării.",
+      "Tema are relevanță practică imediată prin noțiuni precum pH, coroziune, siguranță și tratarea substanțelor periculoase."
+    ],
     problem: {
       label: "evaluare U6",
       given: "$Al + H_2SO_4$ diluat; 27 g $Al$",
@@ -2340,6 +2678,11 @@ const recapTopicsCh7 = {
       "Fenolftaleina → roz în baze; incoloră în acid/neutru (nu invers!).",
       "Bazele se numesc hidroxizi, nu oxizi ($CuO \\neq Cu(OH)_2$).",
       "$Al(OH)_3$ este amfoter – reacționează și cu acizi și cu baze tari."
+    ],
+    applications: [
+      "Bazele sunt importante în igienă, construcții, industrie și în numeroase procese de neutralizare.",
+      "Indicatorii și reacțiile bazelor oferă elevului metode concrete de identificare în laborator.",
+      "Legătura dintre baze, oxizi acizi și săruri pregătește natural unitatea următoare despre săruri."
     ],
     problem: {
       label: "evaluare U7",
@@ -2377,6 +2720,11 @@ const recapTopicsCh7 = {
       "$BaSO_4$ este insolubil – reacția $BaCl_2 + Na_2SO_4$ are loc și dă $\\downarrow$.",
       "Nu confundați $CaCO_3$ (calcarul) cu $Na_2CO_3$ (soda)."
     ],
+    applications: [
+      "Sărurile leagă conținutul anterior despre acizi, baze și oxizi într-o clasă de substanțe extrem de prezentă în viața reală.",
+      "Exemplele din alimentație, agricultură și geologie fac tema ușor de conectat la experiența elevului.",
+      "Metodele de obținere și de identificare a sărurilor apar frecvent în probleme și în aplicații practice."
+    ],
     problem: {
       label: "evaluare U8",
       given: "$CaCO_3 + 2HCl \\rightarrow CaCl_2 + H_2O + CO_2\\uparrow$; 50 g $CaCO_3$",
@@ -2413,6 +2761,11 @@ const recapTopicsCh7 = {
       "Fierberea apei nu elimină poluanții chimici, doar microorganismele.",
       "Solubilitatea gazelor scade cu temperatura (invers față de majoritatea solidelor)."
     ],
+    applications: [
+      "Unitatea despre apă leagă proprietățile fizice, soluțiile și protecția mediului într-un mod foarte apropiat de experiența cotidiană.",
+      "Calculele de concentrație și noțiunile despre tratarea apei au utilitate practică imediată.",
+      "Apa este și conținut curricular de bază, și context ideal pentru consolidarea conceptelor deja învățate."
+    ],
     problem: {
       label: "evaluare unitate 9",
       given: "30 g sare dizolvată în 270 g apă; se cere și reacția sodiului cu apa",
@@ -2448,6 +2801,11 @@ const recapTopicsCh7 = {
       "$CO$ (monoxid, toxic) ≠ $CO_2$ (dioxid, produs normal al arderii complete).",
       "Azotul nu întreține arderea – doar oxigenul o face.",
       "Nu orice combustibil ars produce aceiași poluanți – depinde de compoziția lui (sulf → $SO_2$, azot → $NO_x$)."
+    ],
+    applications: [
+      "Această unitate are valoare practică imediată pentru siguranță, sănătate și înțelegerea poluării aerului.",
+      "Triunghiul focului și diferența dintre ardere completă și incompletă sunt idei esențiale în educația științifică de bază.",
+      "Tema leagă reacțiile chimice de mediu, energie și viața cotidiană într-un mod direct și ușor de înțeles."
     ],
     problem: {
       label: "evaluare unitate 10",

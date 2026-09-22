@@ -8,6 +8,26 @@ function m8List(items) {
   return items.map(function(item) { return '<li>' + item + '</li>'; }).join('');
 }
 
+const M8_DIF_LABELS = {
+  usor: 'Usor',
+  mediu: 'Mediu',
+  dificil: 'Dificil',
+  'f-dificil': 'Foarte dificil'
+};
+
+function m8ExerciseList(items) {
+  return items.map(function(item) {
+    if (typeof item === 'string') {
+      return '<li>' + item + '</li>';
+    }
+    const label = M8_DIF_LABELS[item.level] || 'Exercitiu';
+    const solution = item.solution
+      ? '<details class="rezolvare-toggle"><summary>Vezi rezolvarea</summary><p>' + item.solution + '</p></details>'
+      : '';
+    return '<li><span class="dif-badge dif-' + item.level + '">' + label + '</span> ' + item.text + solution + '</li>';
+  }).join('');
+}
+
 function m8Solved(title, data, ask, solution, answer, check) {
   return `
     <div class="rezolvat">
@@ -38,7 +58,7 @@ function m8Lesson(spec) {
       }).join('')}
       <div class="atentie"><div class="atentie-label">Tips & tricks</div><p>${spec.tips}</p></div>
       <h4>Exerciții propuse</h4>
-      <ul>${m8List(spec.exercises)}</ul>
+      <ul>${m8ExerciseList(spec.exercises)}</ul>
     </div>
   `;
 }
@@ -51,7 +71,7 @@ function m8Recap(spec) {
       <div class="atentie"><div class="atentie-label">Greșeli frecvente</div><p>${spec.mistakes}</p></div>
       ${m8Solved('Problema tip Evaluare Națională', spec.en.data, spec.en.ask, spec.en.solution, spec.en.answer, spec.en.check)}
       <h4>Exerciții mixte</h4>
-      <ul>${m8List(spec.exercises)}</ul>
+      <ul>${m8ExerciseList(spec.exercises)}</ul>
     </div>
   `;
 }
@@ -137,7 +157,14 @@ const m8U1 = [
         { title: "tip EN", data: "$A=\\{x\\in Z\\mid -2\\le x<4\\}$ și B este mulțimea numerelor pare", ask: "$A\\cap B$", solution: "Elementele lui A sunt $-2,-1,0,1,2,3$. Cele pare sunt $-2,0,2$.", answer: "$A\\cap B=\\{-2,0,2\\}$" }
       ],
       tips: "Citește acoladele astfel: elementele x cu proprietatea... Domeniul este esențial; aceeași condiție poate da răspunsuri diferite în N, Z sau R.",
-      exercises: ["Scrieți prin enumerare $A=\\{x\\in N\\mid 2<x\\le8\\}$.", "Determinați $A\\cap B$ pentru $A=\\{1,3,5,7,9\\}$ și $B=\\{3,6,9,12\\}$.", "Scrieți elementele mulțimii $\\{x\\in Z\\mid |x|\\le3\\}$.", "Determinați $\\{0,1,2,3,4,5\\}\\setminus\\{2,4,6\\}$.", "Problemă tip EN: câte elemente are $\\{x\\in Z\\mid -5<x\\le6$, x impar$\\}$?"]
+      exercises: [
+        { level: "usor", text: "Scrieți prin enumerare $A=\{x\in N\mid 2<x\le8\}$.", solution: "Numerele naturale strict mai mari decât 2 și cel mult egale cu 8 sunt 3, 4, 5, 6, 7, 8. Rezultă $A=\{3,4,5,6,7,8\}$." },
+        { level: "usor", text: "Determinați $A\cap B$ pentru $A=\{1,3,5,7,9\}$ și $B=\{3,6,9,12\}$.", solution: "Elementele comune sunt 3 și 9. Prin urmare, $A\cap B=\{3,9\}$." },
+        { level: "mediu", text: "Scrieți elementele mulțimii $\{x\in Z\mid |x|\le3\}$.", solution: "Condiția $|x|\le3$ înseamnă că x este între -3 și 3 inclusiv. Mulțimea este $\{-3,-2,-1,0,1,2,3\}$." },
+        { level: "mediu", text: "Determinați $\{0,1,2,3,4,5\}\setminus\{2,4,6\}$.", solution: "Păstrăm elementele primei mulțimi care nu apar în a doua. Eliminăm 2 și 4, iar 6 nu influențează deoarece nu este în prima mulțime. Rezultă $\{0,1,3,5\}$." },
+        { level: "dificil", text: "Câte elemente are mulțimea $\{x\in Z\mid -5<x\le6$, x impar$\}$?", solution: "Întregii dintre -5 și 6 sunt -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6. Dintre aceștia, impari sunt -3, -1, 1, 3, 5, deci mulțimea are 5 elemente." },
+        { level: "f-dificil", text: "Pentru $A=\{x\in Z\mid -2\le x\le4\}$ și $B=\{x\in Z\mid x$ multiplu de 3$\}$, determinați $A\cup B$ știind că lucrăm doar cu elementele lui B cuprinse între -6 și 6.", solution: "Elementele lui A sunt $\{-2,-1,0,1,2,3,4\}$. Multiplii lui 3 între -6 și 6 sunt $\{-6,-3,0,3,6\}$. Reuniunea conține toate elementele distincte: $\{-6,-3,-2,-1,0,1,2,3,4,6\}$." }
+      ]
     })
   },
   {
@@ -155,7 +182,14 @@ const m8U1 = [
         { title: "tip EN", data: "$A=(-3,2]$ și $B=[0,5)$", ask: "$A\\cup B$ și $A\\cap B$", solution: "Reuniunea acoperă toate valorile de la $-3$ la 5, fără capete. Intersecția conține valorile comune de la 0 la 2, cu ambele capete incluse.", answer: "$A\\cup B=(-3,5)$, $A\\cap B=[0,2]$" }
       ],
       tips: "Infinitul nu este număr real, deci lângă $-\\infty$ sau $+\\infty$ se folosește mereu paranteză rotundă.",
-      exercises: ["Scrieți ca interval: $3\\le x\\lt9$.", "Reprezentați pe axă $(-4,1]$.", "Calculați $[-2,6]\\cap(3,8)$.", "Calculați $(-\\infty,4]\\cup[1,7)$.", "Problemă tip EN: determinați numerele întregi din $(-3,4]$ și calculați suma lor."]
+      exercises: [
+        { level: "usor", text: "Scrieți ca interval: $3\le x\lt9$.", solution: "Capătul 3 este inclus, iar 9 nu este inclus. Intervalul este $[3,9)$." },
+        { level: "usor", text: "Reprezentați pe axă $(-4,1]$.", solution: "Se marchează un punct gol la -4, un punct plin la 1 și se trasează segmentul dintre ele. În scris, rămâne intervalul $(-4,1]$." },
+        { level: "mediu", text: "Calculați $[-2,6]\cap(3,8)$.", solution: "Partea comună începe imediat după 3 și se termină la 6. Numărul 3 nu este inclus, iar 6 este inclus. Rezultă $(3,6]$." },
+        { level: "mediu", text: "Calculați $(-\infty,4]\cup[1,7)$.", solution: "Primul interval merge până la 4 inclusiv, iar al doilea începe de la 1 și merge până la 7 fără 7. Reuniunea acoperă toate valorile mai mici decât 7, deci $(-\infty,7)$." },
+        { level: "dificil", text: "Determinați numerele întregi din $(-3,4]$ și calculați suma lor.", solution: "Întregii din interval sunt -2, -1, 0, 1, 2, 3, 4. Suma este $-2-1+0+1+2+3+4=7$." },
+        { level: "f-dificil", text: "Dacă $I=(-5,2]$ și $J=[-1,+\infty)$, determinați $I\cap J$ și explicați de ce fiecare capăt este sau nu este inclus.", solution: "Partea comună începe la -1 și merge până la 2. Numărul -1 este inclus deoarece aparține lui J și aparține lui I, iar 2 este inclus deoarece aparține lui I și este mai mic decât orice limită superioară a lui J. Rezultă $[-1,2]$." }
+      ]
     })
   },
   {
@@ -172,7 +206,14 @@ const m8U1 = [
         { title: "tip EN", data: "Un abonament costă 20 lei plus 3 lei pe zi. Bugetul este cel mult 50 lei.", ask: "numărul maxim de zile", solution: "Modelăm $20+3x\\le50$, deci $3x\\le30$, $x\\le10$. Cum x este număr natural, maximul este 10.", answer: "cel mult 10 zile" }
       ],
       tips: "Scrie explicit pasul în care împarți la un număr negativ. Acolo se pierde cel mai des semnul corect.",
-      exercises: ["Rezolvați $5x-10\\le0$.", "Rezolvați $-2x+8\\ge0$.", "Scrieți ca interval soluția inecuației $4x+1\\gt9$.", "Un taxi costă 8 lei pornirea și 2,5 lei/km. Pentru cel mult 33 lei, câți kilometri se pot parcurge?", "Problemă tip EN: determinați cel mai mare număr întreg care verifică $3x-7\\lt11$."]
+      exercises: [
+        { level: "usor", text: "Rezolvați $5x-10\le0$.", solution: "$5x\le10$, deci $x\le2$. Soluția este $(-\infty,2]$." },
+        { level: "usor", text: "Rezolvați $-2x+8\ge0$.", solution: "$-2x\ge-8$. Împărțim la -2 și schimbăm sensul: $x\le4$. Soluția este $(-\infty,4]$." },
+        { level: "mediu", text: "Scrieți ca interval soluția inecuației $4x+1\gt9$.", solution: "$4x\gt8$, deci $x\gt2$. În formă de interval, soluția este $(2,+\infty)$." },
+        { level: "mediu", text: "Un taxi costă 8 lei pornirea și 2,5 lei/km. Pentru cel mult 33 lei, câți kilometri se pot parcurge?", solution: "Scriem inecuația $8+2{,}5x\le33$. Rezultă $2{,}5x\le25$, deci $x\le10$. Se pot parcurge cel mult 10 km." },
+        { level: "dificil", text: "Determinați cel mai mare număr întreg care verifică $3x-7\lt11$.", solution: "$3x\lt18$, deci $x\lt6$. Cel mai mare număr întreg mai mic decât 6 este 5." },
+        { level: "f-dificil", text: "Rezolvați $-4x+3\lt15$ și interpretați soluția ca interval și ca mulțime de numere întregi.", solution: "$-4x\lt12$. Împărțim la -4 și schimbăm sensul: $x\gt-3$. Ca interval, soluția este $(-3,+\infty)$. Ca mulțime de numere întregi, soluțiile sunt $-2,-1,0,1,2,\ldots$." }
+      ]
     })
   }
 ];
@@ -192,7 +233,14 @@ const m8U2 = [
         { title: "tip EN", data: "$E=2(x+3)-4(x-1)+5x$", ask: "valoarea pentru $x=-2$", solution: "$E=2x+6-4x+4+5x=3x+10$. Pentru $x=-2$, $E=4$.", answer: "$4$" }
       ],
       tips: "$x^2$ și x nu sunt termeni asemenea. Nu le aduna chiar dacă ambele conțin litera x.",
-      exercises: ["Reduceți $5a-2b+3a+7b$.", "Calculați $2x^3\\cdot5x^2$.", "Simplificați $3(2x-1)-2(x+4)$.", "Calculați $E=x^2-2x+1$ pentru $x=-3$.", "Problemă tip EN: arătați că $2(x-1)+3(x+2)-5x$ este constant."]
+      exercises: [
+        { level: "usor", text: "Reduceți $5a-2b+3a+7b$.", solution: "Adunăm termenii asemenea: $5a+3a=8a$ și $-2b+7b=5b$. Rezultă $8a+5b$." },
+        { level: "usor", text: "Calculați $2x^3\\cdot5x^2$.", solution: "Înmulțim coeficienții: $2\\cdot5=10$. La aceeași bază adunăm exponenții: $x^{3+2}=x^5$. Rezultă $10x^5$." },
+        { level: "mediu", text: "Simplificați $3(2x-1)-2(x+4)$.", solution: "Desfacem parantezele: $6x-3-2x-8=4x-11$." },
+        { level: "mediu", text: "Calculați $E=x^2-2x+1$ pentru $x=-3$.", solution: "Înlocuim: $E=(-3)^2-2(-3)+1=9+6+1=16$." },
+        { level: "dificil", text: "Arătați că $2(x-1)+3(x+2)-5x$ este constant.", solution: "Reducem expresia: $2x-2+3x+6-5x=4$. Nu mai apare x, deci expresia este constantă și are valoarea 4." },
+        { level: "f-dificil", text: "Reduceți și interpretați expresia $A=4(2x-3)-3(x+1)+5$.", solution: "Calculăm: $A=8x-12-3x-3+5=5x-10$. Expresia redusă este liniară în x, cu coeficient 5 și termen liber -10." }
+      ]
     })
   },
   {
@@ -209,7 +257,14 @@ const m8U2 = [
         { title: "tip EN", data: "$E=(x-5)^2-(x+5)(x-5)$", ask: "forma redusă", solution: "$E=x^2-10x+25-(x^2-25)=-10x+50$.", answer: "$50-10x$" }
       ],
       tips: "La $(a+b)^2$, termenul $2ab$ este obligatoriu. Dacă ai doar două pătrate, formula este greșită.",
-      exercises: ["Dezvoltați $(x-7)^2$.", "Calculați $(2x+3)^2$.", "Reduceți $(x+2)^2-(x-2)^2$.", "Arătați că $(n+1)^2-n^2=2n+1$.", "Problemă tip EN: determinați x dacă $(x+3)^2-x^2=39$."]
+      exercises: [
+        { level: "usor", text: "Dezvoltați $(x-7)^2$.", solution: "Aplicăm formula pătratului diferenței: $(x-7)^2=x^2-14x+49$." },
+        { level: "usor", text: "Calculați $(2x+3)^2$.", solution: "Aplicăm $(a+b)^2=a^2+2ab+b^2$: $(2x+3)^2=4x^2+12x+9$." },
+        { level: "mediu", text: "Reduceți $(x+2)^2-(x-2)^2$.", solution: "Dezvoltăm: $(x^2+4x+4)-(x^2-4x+4)=8x$." },
+        { level: "mediu", text: "Arătați că $(n+1)^2-n^2=2n+1$.", solution: "Dezvoltăm $(n+1)^2=n^2+2n+1$. Scăzând $n^2$, obținem $2n+1$." },
+        { level: "dificil", text: "Determinați x dacă $(x+3)^2-x^2=39$.", solution: "Dezvoltăm: $x^2+6x+9-x^2=39$, deci $6x+9=39$. Rezultă $6x=30$, așadar $x=5$." },
+        { level: "f-dificil", text: "Factorizați expresia $(x+4)^2-16$ după dezvoltare și explicați de ce se poate aplica și diferența de pătrate.", solution: "Mai întâi dezvoltăm: $(x+4)^2-16=x^2+8x+16-16=x^2+8x=x(x+8)$. Se poate observa și ca diferență de pătrate între $(x+4)^2$ și $4^2$, deci $[(x+4)-4][(x+4)+4]=x(x+8)$." }
+      ]
     })
   },
   {
@@ -226,7 +281,14 @@ const m8U2 = [
         { title: "tip EN", data: "$E=x^2-6x+9$", ask: "factorizarea și valoarea pentru $x=3$", solution: "$E=(x-3)^2$. Pentru $x=3$, $E=0$.", answer: "$(x-3)^2$, valoarea 0" }
       ],
       tips: "Scoate factorul comun înainte de orice formulă. De multe ori expresia se simplifică imediat.",
-      exercises: ["Factorizați $4x+8$.", "Factorizați $x^2-49$.", "Factorizați $x^2+10x+25$.", "Descompuneți $2x^2-8x$.", "Problemă tip EN: rezolvați $(x-2)(x+2)=0$."]
+      exercises: [
+        { level: "usor", text: "Factorizați $4x+8$.", solution: "Scoatem factorul comun 4: $4x+8=4(x+2)$." },
+        { level: "usor", text: "Factorizați $x^2-49$.", solution: "Este diferență de pătrate: $x^2-7^2=(x-7)(x+7)$." },
+        { level: "mediu", text: "Factorizați $x^2+10x+25$.", solution: "Recunoaștem pătratul perfect: $x^2+10x+25=(x+5)^2$." },
+        { level: "mediu", text: "Descompuneți $2x^2-8x$.", solution: "Scoatem factorul comun $2x$: $2x^2-8x=2x(x-4)$." },
+        { level: "dificil", text: "Rezolvați $(x-2)(x+2)=0$.", solution: "Folosim regula produsului nul: $x-2=0$ sau $x+2=0$. Rezultă $x=2$ sau $x=-2$." },
+        { level: "f-dificil", text: "Factorizați $x^2-4x-12$ prin căutarea a două numere potrivite.", solution: "Căutăm două numere cu produs -12 și sumă -4: -6 și 2. Deci $x^2-4x-12=(x-6)(x+2)$." }
+      ]
     })
   },
   {
@@ -243,7 +305,14 @@ const m8U2 = [
         { title: "tip EN", data: "$E=\\frac{x^2-4}{x+2}$", ask: "$E(1)$ și condiția", solution: "Condiția este $x\\ne-2$. Avem $x^2-4=(x-2)(x+2)$, deci $E=x-2$. Pentru $x=1$, $E=-1$.", answer: "$E(1)=-1$, cu $x\\ne-2$" }
       ],
       tips: "Nu simplifica peste semnul plus sau minus. Transformă mai întâi expresia în produs.",
-      exercises: ["Stabiliți condiția pentru $\\frac{2x}{x+5}$.", "Simplificați $\\frac{x^2-16}{x-4}$.", "Calculați $\\frac{1}{x}+\\frac{2}{x}$.", "Determinați valorile interzise pentru $\\frac{x+1}{x^2-9}$.", "Problemă tip EN: simplificați $\\frac{x^2+6x+9}{x+3}$ și calculați valoarea pentru $x=1$."]
+      exercises: [
+        { level: "usor", text: "Stabiliți condiția pentru $\\frac{2x}{x+5}$.", solution: "Numitorul trebuie să fie diferit de zero: $x+5\\ne0$. Rezultă $x\\ne-5$." },
+        { level: "usor", text: "Simplificați $\\frac{x^2-16}{x-4}$.", solution: "Factorizăm: $x^2-16=(x-4)(x+4)$. Simplificăm factorul comun cu condiția $x\\ne4$ și obținem $x+4$." },
+        { level: "mediu", text: "Calculați $\\frac{1}{x}+\\frac{2}{x}$.", solution: "Numitorul este deja comun, deci adunăm numărătorii: $\\frac{1+2}{x}=\\frac{3}{x}$, cu $x\\ne0$." },
+        { level: "mediu", text: "Determinați valorile interzise pentru $\\frac{x+1}{x^2-9}$.", solution: "Cerem $x^2-9\\ne0$. Factorizăm: $(x-3)(x+3)\\ne0$, deci $x\\ne3$ și $x\\ne-3$." },
+        { level: "dificil", text: "Simplificați $\\frac{x^2+6x+9}{x+3}$ și calculați valoarea pentru $x=1$.", solution: "Numărătorul este $(x+3)^2$, deci fracția devine $x+3$, cu condiția $x\\ne-3$. Pentru $x=1$, valoarea este 4." },
+        { level: "f-dificil", text: "Explicați de ce în $\\frac{x^2+5x}{x}$ nu putem spune direct că expresia este egală cu $x+5$ fără condiție.", solution: "Factorizăm numărătorul: $x(x+5)$. Putem simplifica doar pentru $x\\ne0$, deci expresia este $x+5$ cu condiția $x\\ne0$. Valoarea interzisă trebuie păstrată." }
+      ]
     })
   },
   {
@@ -260,7 +329,14 @@ const m8U2 = [
         { title: "tip EN", data: "$x^2-4x+3=0$", ask: "suma soluțiilor", solution: "$(x-1)(x-3)=0$, deci soluțiile sunt 1 și 3. Suma este 4.", answer: "$4$" }
       ],
       tips: "Pentru ecuațiile cu numere mici, caută două numere cu produs c și sumă opusul coeficientului lui x.",
-      exercises: ["Rezolvați $(x-4)(x+1)=0$.", "Rezolvați $x^2-9=0$.", "Rezolvați $x^2-5x+6=0$.", "Calculați discriminantul pentru $x^2+2x+1=0$.", "Problemă tip EN: determinați produsul soluțiilor ecuației $x^2-8x+12=0$."]
+      exercises: [
+        { level: "usor", text: "Rezolvați $(x-4)(x+1)=0$.", solution: "Aplicăm produsul nul: $x-4=0$ sau $x+1=0$. Rezultă $x=4$ sau $x=-1$." },
+        { level: "usor", text: "Rezolvați $x^2-9=0$.", solution: "Scriem $x^2=9$, deci $x=3$ sau $x=-3$." },
+        { level: "mediu", text: "Rezolvați $x^2-5x+6=0$.", solution: "Factorizăm: $x^2-5x+6=(x-2)(x-3)$. Soluțiile sunt $x=2$ și $x=3$." },
+        { level: "mediu", text: "Calculați discriminantul pentru $x^2+2x+1=0$.", solution: "Avem $a=1$, $b=2$, $c=1$. Discriminantul este $\\Delta=b^2-4ac=4-4=0$." },
+        { level: "dificil", text: "Determinați produsul soluțiilor ecuației $x^2-8x+12=0$.", solution: "Factorizăm: $x^2-8x+12=(x-2)(x-6)$. Soluțiile sunt 2 și 6, deci produsul este 12." },
+        { level: "f-dificil", text: "Rezolvați ecuația $x^2-2x-8=0$ și explicați de ce am ales factorizarea, nu formula generală.", solution: "Căutăm două numere cu produs -8 și sumă -2: -4 și 2. Deci $x^2-2x-8=(x-4)(x+2)$, de unde $x=4$ sau $x=-2$. Factorizarea este mai rapidă aici deoarece coeficienții sunt simpli și se recunoaște ușor descompunerea." }
+      ]
     })
   }
 ];
@@ -280,7 +356,14 @@ const m8U3 = [
         { title: "tip EN", data: "$f:\\{-1,0,2\\}\\to R$, $f(x)=x^2-1$", ask: "suma valorilor funcției", solution: "$f(-1)=0$, $f(0)=-1$, $f(2)=3$. Suma este $0-1+3=2$.", answer: "$2$" }
       ],
       tips: "Două intrări pot avea aceeași ieșire. Problema apare doar când aceeași intrare are două ieșiri diferite.",
-      exercises: ["Calculați valorile lui $f(x)=3x-2$ pentru $x\\in\\{0,1,4\\}$.", "Stabiliți dacă relația $(1,2),(1,3),(2,4)$ este funcție.", "Scrieți graficul funcției $f:\\{2,3\\}\\to R$, $f(x)=x+5$.", "Determinați x dacă $f(x)=7$ și $f(x)=2x+1$.", "Problemă tip EN: pentru $f(x)=x^2+2x$, $x\\in\\{-2,-1,0,1\\}$, determinați valoarea maximă."]
+      exercises: [
+        { level: "usor", text: "Calculați valorile lui $f(x)=3x-2$ pentru $x\\in\\{0,1,4\\}$.", solution: "Calculăm: $f(0)=-2$, $f(1)=1$, $f(4)=10$." },
+        { level: "usor", text: "Stabiliți dacă relația $(1,2),(1,3),(2,4)$ este funcție.", solution: "Nu este funcție, deoarece aceeași intrare 1 are două imagini diferite: 2 și 3." },
+        { level: "mediu", text: "Scrieți graficul funcției $f:\\{2,3\\}\\to R$, $f(x)=x+5$.", solution: "Calculăm valorile: $f(2)=7$ și $f(3)=8$. Graficul finit este format din punctele $(2,7)$ și $(3,8)$." },
+        { level: "mediu", text: "Determinați x dacă $f(x)=7$ și $f(x)=2x+1$.", solution: "Rezolvăm $2x+1=7$. Obținem $2x=6$, deci $x=3$." },
+        { level: "dificil", text: "Pentru $f(x)=x^2+2x$, $x\\in\\{-2,-1,0,1\\}$, determinați valoarea maximă.", solution: "Calculăm: $f(-2)=0$, $f(-1)=-1$, $f(0)=0$, $f(1)=3$. Valoarea maximă este 3." },
+        { level: "f-dificil", text: "Explicați de ce relația dată de punctele $(0,1),(2,5),(2,6)$ nu poate reprezenta graficul unei funcții.", solution: "Într-un grafic de funcție, aceeași abscisă nu poate avea două ordonate diferite. Aici, pentru x=2 apar valorile 5 și 6, deci relația nu este funcție." }
+      ]
     })
   },
   {
@@ -298,7 +381,14 @@ const m8U3 = [
         { title: "tip EN", data: "punctul $A(-2,7)$ este pe graficul $f(x)=ax+3$", ask: "valoarea lui a", solution: "Înlocuim: $7=-2a+3$, deci $4=-2a$, $a=-2$.", answer: "$a=-2$" }
       ],
       tips: "Pentru desen sunt suficiente două puncte corecte. Alege valori ale lui x care dau calcule simple.",
-      exercises: ["Calculați $f(5)$ pentru $f(x)=x-4$.", "Determinați intersecția cu Oy pentru $f(x)=-2x+6$.", "Aflați x pentru care $f(x)=0$, unde $f(x)=4x+8$.", "Verificați dacă $A(2,5)$ aparține graficului $f(x)=3x-1$.", "Problemă tip EN: dreapta $f(x)=mx+2$ trece prin $B(3,11)$. Determinați m."]
+      exercises: [
+        { level: "usor", text: "Calculați $f(5)$ pentru $f(x)=x-4$.", solution: "Înlocuim x=5: $f(5)=5-4=1$." },
+        { level: "usor", text: "Determinați intersecția cu Oy pentru $f(x)=-2x+6$.", solution: "Pentru Oy luăm x=0. Rezultă $f(0)=6$, deci intersecția este punctul $(0,6)$." },
+        { level: "mediu", text: "Aflați x pentru care $f(x)=0$, unde $f(x)=4x+8$.", solution: "Rezolvăm $4x+8=0$. Obținem $4x=-8$, deci $x=-2$." },
+        { level: "mediu", text: "Verificați dacă $A(2,5)$ aparține graficului $f(x)=3x-1$.", solution: "Calculăm $f(2)=3\\cdot2-1=5$. Cum ordonata obținută este 5, punctul A aparține graficului." },
+        { level: "dificil", text: "Dreapta $f(x)=mx+2$ trece prin $B(3,11)$. Determinați m.", solution: "Înlocuim coordonatele punctului: $11=3m+2$. Rezultă $3m=9$, deci $m=3$." },
+        { level: "f-dificil", text: "Determinați intersecțiile cu axele pentru $f(x)=-3x+9$ și interpretați geometric semnul lui a.", solution: "Cu Oy: $x=0$, deci punctul este $(0,9)$. Cu Ox: $-3x+9=0$, deci $x=3$, punctul $(3,0)$. Coeficientul $a=-3<0$, deci dreapta este descrescătoare." }
+      ]
     })
   },
   {
@@ -315,7 +405,14 @@ const m8U3 = [
         { title: "tip EN", data: "5 elevi au nota 8, 3 elevi au nota 9 și 2 elevi au nota 10", ask: "media", solution: "$M=\\frac{5\\cdot8+3\\cdot9+2\\cdot10}{10}=\\frac{87}{10}=8,7$.", answer: "$8,7$" }
       ],
       tips: "Mediana cere date ordonate. Media nu cere ordonare, dar cere să numeri toate valorile sau toate frecvențele.",
-      exercises: ["Calculați media numerelor 3, 5, 8, 8.", "Determinați mediana setului 10, 7, 8, 6, 9.", "Aflați modul pentru 2, 4, 4, 5, 5, 5, 8.", "Un tabel are valorile 6, 7, 8 cu frecvențe 2, 3, 5. Calculați media.", "Problemă tip EN: după adăugarea unei note de 10 la notele 7, 8, 8, calculați noua medie."]
+      exercises: [
+        { level: "usor", text: "Calculați media numerelor 3, 5, 8, 8.", solution: "Suma este $3+5+8+8=24$. Împărțim la 4 și obținem media 6." },
+        { level: "usor", text: "Determinați mediana setului 10, 7, 8, 6, 9.", solution: "Ordonăm datele: 6, 7, 8, 9, 10. Valoarea din mijloc este 8, deci mediana este 8." },
+        { level: "mediu", text: "Aflați modul pentru 2, 4, 4, 5, 5, 5, 8.", solution: "Valoarea care apare cel mai des este 5, de trei ori. Modul este 5." },
+        { level: "mediu", text: "Un tabel are valorile 6, 7, 8 cu frecvențe 2, 3, 5. Calculați media.", solution: "Media ponderată este $\\frac{6\\cdot2+7\\cdot3+8\\cdot5}{2+3+5}=\\frac{12+21+40}{10}=\\frac{73}{10}=7{,}3$." },
+        { level: "dificil", text: "După adăugarea unei note de 10 la notele 7, 8, 8, calculați noua medie.", solution: "Noua sumă este $7+8+8+10=33$. Sunt 4 note, deci media este $\\frac{33}{4}=8{,}25$." },
+        { level: "f-dificil", text: "Pentru datele 2, 5, 5, 7, 9, calculați amplitudinea și explicați ce măsoară ea.", solution: "Amplitudinea este diferența dintre maxim și minim: $9-2=7$. Ea arată întinderea valorilor, adică distanța dintre extrema inferioară și cea superioară a setului." }
+      ]
     })
   }
 ];
@@ -348,7 +445,14 @@ const m8U4 = [
         { title: "tip EN", data: "cubul $ABCDA'B'C'D'$", ask: "poziția dreptelor AB și $CC'$", solution: "AB este muchie a bazei, iar $CC'$ este muchie verticală. Nu se intersectează și nu sunt paralele.", answer: "drepte necoplanare" }
       ],
       tips: "În spațiu, două drepte care nu se întâlnesc în desen nu sunt automat paralele. Pot fi necoplanare.",
-      exercises: ["Numiți planul determinat de A, B, C necoliniare.", "În cub, precizați poziția dreptelor AB și CD.", "În cub, precizați poziția dreptelor AB și $A'B'$.", "Dați exemplu de două drepte necoplanare într-un cub.", "Problemă tip EN: într-o prismă, stabiliți dacă o muchie laterală este inclusă în planul bazei."]
+      exercises: [
+        { level: "usor", text: "Numiți planul determinat de A, B, C necoliniare.", solution: "Trei puncte necoliniare determină un singur plan, notat $(ABC)$." },
+        { level: "usor", text: "În cub, precizați poziția dreptelor AB și CD.", solution: "AB și CD sunt muchii opuse ale aceleiași fețe pătrate ABCD, deci sunt paralele." },
+        { level: "mediu", text: "În cub, precizați poziția dreptelor AB și $A'B'$.", solution: "Cele două muchii sunt corespunzătoare în baze paralele ale cubului, deci sunt paralele." },
+        { level: "mediu", text: "Dați exemplu de două drepte necoplanare într-un cub.", solution: "Un exemplu este AB și $CC'$. Ele nu se intersectează, nu sunt paralele și nu aparțin aceluiași plan, deci sunt necoplanare." },
+        { level: "dificil", text: "Într-o prismă, stabiliți dacă o muchie laterală este inclusă în planul bazei.", solution: "Nu. Muchia laterală intersectează planul bazei într-un singur punct, vârful bazei, și este perpendiculară pe plan în prisma dreaptă. Deci nu este inclusă în planul bazei." },
+        { level: "f-dificil", text: "Explicați de ce două drepte care nu se intersectează într-un desen spațial nu sunt neapărat paralele.", solution: "În spațiu există și cazul dreptelor necoplanare. Două drepte pot să nu se întâlnească și totuși să nu fie paralele, deoarece nu sunt în același plan." }
+      ]
     })
   },
   {
@@ -366,7 +470,14 @@ const m8U4 = [
         { title: "tip EN", data: "piramidă patrulateră regulată cu latura bazei 6 cm și înălțimea 4 cm", ask: "muchia laterală", solution: "Distanța de la centrul bazei la un vârf este $3\\sqrt2$ cm. Muchia laterală are pătratul $4^2+(3\\sqrt2)^2=16+18=34$.", answer: "$\\sqrt{34}$ cm" }
       ],
       tips: "În piramida regulată, triunghiul-cheie este format din vârf, centrul bazei și un vârf al bazei.",
-      exercises: ["Câte fețe are o piramidă hexagonală?", "Câte muchii are o piramidă triunghiulară?", "Într-o piramidă patrulateră regulată cu latura bazei 8 cm, calculați distanța de la centrul bazei la un vârf.", "Dacă înălțimea este 6 cm și distanța de la centrul bazei la un vârf este 8 cm, calculați muchia laterală.", "Problemă tip EN: calculați apotema unei piramide patrulatere regulate cu latura bazei 10 cm și înălțimea 12 cm."]
+      exercises: [
+        { level: "usor", text: "Câte fețe are o piramidă hexagonală?", solution: "Are o bază hexagonală și 6 fețe laterale triunghiulare. În total, are 7 fețe." },
+        { level: "usor", text: "Câte muchii are o piramidă triunghiulară?", solution: "Baza triunghiulară are 3 muchii, iar muchiile laterale sunt tot 3. În total, sunt 6 muchii." },
+        { level: "mediu", text: "Într-o piramidă patrulateră regulată cu latura bazei 8 cm, calculați distanța de la centrul bazei la un vârf.", solution: "Diagonala pătratului de latură 8 este $8\sqrt2$. Distanța de la centru la un vârf este jumătate din diagonală, adică $4\sqrt2$ cm." },
+        { level: "mediu", text: "Dacă înălțimea este 6 cm și distanța de la centrul bazei la un vârf este 8 cm, calculați muchia laterală.", solution: "Muchia laterală este ipotenuza triunghiului dreptunghic cu catetele 6 și 8. Rezultă $\sqrt{6^2+8^2}=\sqrt{100}=10$ cm." },
+        { level: "dificil", text: "Calculați apotema unei piramide patrulatere regulate cu latura bazei 10 cm și înălțimea 12 cm.", solution: "Apotema se calculează în triunghiul format de vârf, centrul bazei și mijlocul unei laturi. Distanța de la centru la mijlocul laturii este 5 cm. Rezultă $a_p=\sqrt{12^2+5^2}=13$ cm." },
+        { level: "f-dificil", text: "Explicați de ce, într-o piramidă regulată, centrul bazei este punctul-cheie pentru toate calculele metrice principale.", solution: "Pentru că înălțimea cade în centrul bazei, iar acesta permite formarea triunghiurilor dreptunghice din care se calculează muchii laterale, apoteme și alte distanțe. Fără acest punct, legătura dintre date și formule este mai greu de organizat." }
+      ]
     })
   },
   {
@@ -384,7 +495,14 @@ const m8U4 = [
         { title: "tip EN", data: "prismă patrulateră regulată cu latura bazei 6 cm și înălțimea 8 cm", ask: "diagonala corpului", solution: "Diagonala bazei este $6\\sqrt2$. Deci $D^2=(6\\sqrt2)^2+8^2=72+64=136$.", answer: "$2\\sqrt{34}$ cm" }
       ],
       tips: "La cub și prismă, caută mai întâi dreptunghiul sau triunghiul dreptunghic care conține segmentul cerut.",
-      exercises: ["Calculați diagonala unui cub cu muchia 4 cm.", "Calculați diagonala unui paralelipiped de dimensiuni 2, 6, 9 cm.", "O prismă dreaptă are baza dreptunghi 5 cm pe 12 cm și înălțimea 10 cm. Calculați diagonala corpului.", "Stabiliți câte fețe laterale are o prismă hexagonală.", "Problemă tip EN: într-un cub cu muchia 6 cm, calculați diagonala corpului."]
+      exercises: [
+        { level: "usor", text: "Calculați diagonala unui cub cu muchia 4 cm.", solution: "Formula diagonalei corpului cubului este $D=a\sqrt3$. Pentru $a=4$, obținem $D=4\sqrt3$ cm." },
+        { level: "usor", text: "Calculați diagonala unui paralelipiped de dimensiuni 2, 6, 9 cm.", solution: "Aplicăm formula $D=\sqrt{a^2+b^2+c^2}=\sqrt{2^2+6^2+9^2}=\sqrt{4+36+81}=\sqrt{121}=11$ cm." },
+        { level: "mediu", text: "O prismă dreaptă are baza dreptunghi 5 cm pe 12 cm și înălțimea 10 cm. Calculați diagonala corpului.", solution: "Diagonala bazei este $\sqrt{5^2+12^2}=13$ cm. Apoi diagonala corpului este $\sqrt{13^2+10^2}=\sqrt{269}$ cm." },
+        { level: "mediu", text: "Stabiliți câte fețe laterale are o prismă hexagonală.", solution: "O prismă are tot atâtea fețe laterale câte laturi are baza. Pentru baza hexagonală, sunt 6 fețe laterale." },
+        { level: "dificil", text: "Într-un cub cu muchia 6 cm, calculați diagonala corpului.", solution: "Folosim formula $D=a\sqrt3$. Pentru $a=6$, rezultă $D=6\sqrt3$ cm." },
+        { level: "f-dificil", text: "Explicați de ce diagonala corpului unei prisme drepte se calculează în doi pași, nu într-un singur dreptunghi din desen.", solution: "Mai întâi se determină diagonala bazei, care aparține unui plan al bazei. Apoi aceasta și înălțimea formează un triunghi dreptunghic spațial, din care se obține diagonala corpului cu o nouă aplicare a teoremei lui Pitagora." }
+      ]
     })
   }
 ];
@@ -497,7 +615,14 @@ spatialExtra.forEach(function(spec) {
         { title: "tip EN", data: "o configurație spațială în care apare același tip de relație", ask: "metoda de rezolvare", solution: "Se reduce problema la o secțiune plană și se aplică Pitagora, asemănare sau proprietăți de paralelism/perpendicularitate.", answer: "metoda este identificarea secțiunii corecte" }
       ],
       tips: "În geometria în spațiu, prima decizie corectă este alegerea planului de calcul. Abia apoi se aplică formule.",
-      exercises: ["Formulați definiția principală a lecției.", "Dați un exemplu pe cub sau prismă.", "Construiți secțiunea sau proiecția necesară într-un desen.", "Rezolvați o cerință numerică folosind Pitagora.", "Problemă tip EN: justificați relația geometrică înainte de calcul."]
+      exercises: [
+        { level: "usor", text: "Formulați definiția principală a lecției.", solution: "Răspunsul corect trebuie să redea ideea-cheie a capitolului, de exemplu: poziția unei drepte față de un plan, definiția unei secțiuni sau a unui unghi în spațiu, în funcție de lecția studiată." },
+        { level: "usor", text: "Dați un exemplu pe cub sau prismă.", solution: "Exemplul trebuie ales după noțiunea lecției. De pildă, pentru plane paralele putem spune că planele bazelor cubului sunt paralele." },
+        { level: "mediu", text: "Construiți secțiunea sau proiecția necesară într-un desen.", solution: "Se pornește de la figura spațială, se identifică planul relevant și se trasează secțiunea sau proiecția astfel încât problema să fie redusă la o figură plană ușor de analizat." },
+        { level: "mediu", text: "Rezolvați o cerință numerică folosind Pitagora.", solution: "Se selectează triunghiul dreptunghic potrivit din secțiune sau din fața corpului, apoi se aplică relația $a^2+b^2=c^2$ pentru a afla lungimea necunoscută." },
+        { level: "dificil", text: "Justificați relația geometrică înainte de calcul într-o problemă tip EN.", solution: "Înainte de a calcula, trebuie precizat de ce două drepte sunt paralele, de ce un segment este perpendicular pe un plan sau de ce o secțiune are forma respectivă. Această justificare stabilește corect figura de calcul." },
+        { level: "f-dificil", text: "Explicați de ce alegerea planului de calcul este etapa decisivă în problemele de geometrie în spațiu.", solution: "În spațiu, multe relații nu sunt vizibile direct. Alegerea planului corect transformă problema într-una plană, unde putem aplica sigur Pitagora, asemănarea sau formulele de arie și unghi." }
+      ]
     })
   });
 });
@@ -517,7 +642,14 @@ const m8U5 = [
         { title: "tip EN", data: "paralelipiped cu dimensiunile 6 cm, 8 cm, 24 cm", ask: "diagonala corpului", solution: "$D=\\sqrt{36+64+576}=\\sqrt{676}=26$.", answer: "26 cm" }
       ],
       tips: "Dacă nu vezi triunghiul dreptunghic, trasează proiecția segmentului pe bază sau pe o față.",
-      exercises: ["Calculați diagonala feței unui cub cu muchia 10 cm.", "Calculați diagonala corpului pentru dimensiunile 2 cm, 3 cm, 6 cm.", "Aflați generatoarea unui con cu $h=15$ cm și $r=8$ cm.", "Într-un cilindru cu $h=12$ cm și $r=5$ cm, calculați diagonala secțiunii axiale.", "Problemă tip EN: într-un cub cu muchia 4 cm, determinați distanța dintre două vârfuri opuse."]
+      exercises: [
+        { level: "usor", text: "Calculați diagonala feței unui cub cu muchia 10 cm.", solution: "Diagonala feței unui pătrat este $d_f=a\sqrt2$. Pentru $a=10$, obținem $10\sqrt2$ cm." },
+        { level: "usor", text: "Calculați diagonala corpului pentru dimensiunile 2 cm, 3 cm, 6 cm.", solution: "Aplicăm formula $D=\sqrt{2^2+3^2+6^2}=\sqrt{4+9+36}=\sqrt{49}=7$ cm." },
+        { level: "mediu", text: "Aflați generatoarea unui con cu $h=15$ cm și $r=8$ cm.", solution: "În con, $g^2=h^2+r^2$. Avem $g=\sqrt{15^2+8^2}=\sqrt{225+64}=\sqrt{289}=17$ cm." },
+        { level: "mediu", text: "Într-un cilindru cu $h=12$ cm și $r=5$ cm, calculați diagonala secțiunii axiale.", solution: "Secțiunea axială este un dreptunghi cu laturile $2r=10$ și 12. Diagonala este $\sqrt{10^2+12^2}=\sqrt{244}=2\sqrt{61}$ cm." },
+        { level: "dificil", text: "Într-un cub cu muchia 4 cm, determinați distanța dintre două vârfuri opuse.", solution: "Distanța dintre două vârfuri opuse este diagonala corpului: $D=4\sqrt3$ cm." },
+        { level: "f-dificil", text: "Explicați de ce generatoarea conului și diagonala secțiunii axiale a cilindrului se obțin din triunghiuri sau dreptunghiuri diferite, deși ambele folosesc Pitagora.", solution: "În con, raza și înălțimea formează cu generatoarea un triunghi dreptunghic. În cilindru, secțiunea axială este un dreptunghi, iar diagonala lui se calculează din laturile $2r$ și $h$. Ideea comună este Pitagora, dar figurile plane intermediare sunt diferite." }
+      ]
     })
   }
 ];
@@ -609,7 +741,14 @@ volumeLessons.forEach(function(spec) {
       steps: ["Identifică tipul corpului.", "Scrie datele cu unități.", "Calculează elementele lipsă, dacă este nevoie.", "Alege formula cerută.", "Verifică unitatea: cm$^2$ pentru arie, cm$^3$ pentru volum."],
       solved: spec.solved,
       tips: "Nu confunda aria cu volumul. Dacă se cere acoperire, ai arie; dacă se cere capacitate, ai volum.",
-      exercises: ["Calculați aria laterală pentru un set de date ales din lecție.", "Calculați aria totală a corpului.", "Calculați volumul corpului.", "Rezolvați o problemă cu unități diferite, transformând înainte de calcul.", "Problemă tip EN: comparați două corpuri cu aceeași înălțime și decideți care are volum mai mare."]
+      exercises: [
+        { level: "usor", text: "Calculați aria laterală pentru un set de date ales din lecție.", solution: "Se alege corpul și se aplică formula potrivită pentru aria laterală. De exemplu, la prismă $A_l=P_b\cdot h$, iar la cilindru $A_l=2\pi rh$." },
+        { level: "usor", text: "Calculați aria totală a corpului.", solution: "Aria totală se obține adunând aria laterală și ariile bazelor. Formula exactă depinde de corpul ales: prismă, piramidă, cilindru, con sau sferă." },
+        { level: "mediu", text: "Calculați volumul corpului.", solution: "Se folosește formula specifică: de exemplu, la prismă $V=A_bh$, la piramidă $V=\frac{A_bh}{3}$, la cilindru $V=\pi r^2h$, la con $V=\frac{\pi r^2h}{3}$." },
+        { level: "mediu", text: "Rezolvați o problemă cu unități diferite, transformând înainte de calcul.", solution: "Toate măsurile trebuie aduse în aceeași unitate înainte de aplicarea formulelor. De exemplu, dacă o lungime este în dm și alta în cm, una dintre ele trebuie transformată pentru a evita erorile la arii și volume." },
+        { level: "dificil", text: "Comparați două corpuri cu aceeași înălțime și decideți care are volum mai mare.", solution: "Dacă înălțimea este aceeași, diferența vine din formula volumului și din aria bazei. De exemplu, între două prisme de aceeași înălțime, are volum mai mare cea cu aria bazei mai mare." },
+        { level: "f-dificil", text: "Explicați de ce aceeași mărime numerică poate reprezenta realități diferite dacă unitatea cerută este cm$^2$ sau cm$^3$.", solution: "cm$^2$ măsoară arii, adică suprafețe, iar cm$^3$ măsoară volume, adică spațiu ocupat. Chiar dacă valoarea numerică este aceeași, semnificația fizică și geometrică este complet diferită." }
+      ]
     })
   });
 });
@@ -632,7 +771,14 @@ const matematica8Data = {
           formulas: ["$A\\cap B$ = elemente comune; $A\\cup B$ = toate elementele din A sau B.", "$[a,b]$ include capetele, $(a,b)$ nu le include.", "La împărțirea unei inecuații cu număr negativ, semnul se schimbă.", "Soluțiile inecuațiilor se scriu frecvent ca intervale."],
           mistakes: "Atenție la parantezele intervalelor și la schimbarea sensului inegalității când se împarte la un număr negativ.",
           en: { data: "$A=(-2,5]$ și $B=[1,7)$", ask: "$A\\cap B$ și numerele întregi din rezultat", solution: "Intersecția este partea comună: $[1,5]$. Numerele întregi sunt 1, 2, 3, 4, 5.", answer: "$[1,5]$, cu 5 numere întregi" },
-          exercises: ["Scrieți ca interval: $x\\ge-3$.", "Calculați $[-1,6)\\cap(2,8]$.", "Rezolvați $3x-12\\le0$.", "Rezolvați $-2x+10\\gt0$.", "Determinați cel mai mic număr întreg din soluția inecuației $x+4\\ge1$."]
+          exercises: [
+            { level: "usor", text: "Scrieți ca interval: $x\ge-3$.", solution: "Toate valorile mai mari sau egale cu -3 formează intervalul $[-3,+\infty)$." },
+            { level: "usor", text: "Calculați $[-1,6)\cap(2,8]$.", solution: "Partea comună începe imediat după 2 și se termină înainte de 6, deoarece 6 nu este inclus în primul interval. Rezultă $(2,6)$." },
+            { level: "mediu", text: "Rezolvați $3x-12\le0$.", solution: "$3x\le12$, deci $x\le4$. Soluția este $(-\infty,4]$." },
+            { level: "mediu", text: "Rezolvați $-2x+10\gt0$.", solution: "$-2x\gt-10$. Împărțim la -2 și schimbăm sensul: $x\lt5$. Soluția este $(-\infty,5)$." },
+            { level: "dificil", text: "Determinați cel mai mic număr întreg din soluția inecuației $x+4\ge1$.", solution: "$x\ge-3$. Cel mai mic număr întreg din soluție este -3." },
+            { level: "f-dificil", text: "Pentru $A=(-4,3]$ și $B=[-1,6)$, determinați $A\cup B$, apoi scrieți toți întregii din intersecția lor.", solution: "Reuniunea acoperă toate valorile de la -4 la 6, fără capetele -4 și 6, deci $A\cup B=(-4,6)$. Intersecția este $[-1,3]$, iar întregii din ea sunt -1, 0, 1, 2, 3." }
+          ]
         })
       }])
     },
@@ -648,7 +794,14 @@ const matematica8Data = {
           formulas: ["$(a+b)^2=a^2+2ab+b^2$", "$(a-b)^2=a^2-2ab+b^2$", "$a^2-b^2=(a-b)(a+b)$", "$\\frac{A}{B}$ există pentru $B\\ne0$.", "$\\Delta=b^2-4ac$ pentru $ax^2+bx+c=0$."],
           mistakes: "Nu simplifica termeni adunați în fracții algebrice și nu uita condițiile de existență.",
           en: { data: "$E=(x+2)^2-(x-2)(x+2)$", ask: "forma redusă și $E(3)$", solution: "$E=x^2+4x+4-(x^2-4)=4x+8$. Pentru $x=3$, $E=20$.", answer: "$E=4x+8$, $E(3)=20$" },
-          exercises: ["Reduceți $4x-2y+5x+7y$.", "Dezvoltați $(2x-1)^2$.", "Factorizați $x^2-36$.", "Simplificați $\\frac{x^2-1}{x-1}$ cu condiție.", "Rezolvați $x^2-3x+2=0$."]
+          exercises: [
+            { level: "usor", text: "Reduceți $4x-2y+5x+7y$.", solution: "Adunăm termenii asemenea: $4x+5x=9x$ și $-2y+7y=5y$. Rezultă $9x+5y$." },
+            { level: "usor", text: "Dezvoltați $(2x-1)^2$.", solution: "Aplicăm formula pătratului diferenței: $(2x-1)^2=4x^2-4x+1$." },
+            { level: "mediu", text: "Factorizați $x^2-36$.", solution: "Este diferență de pătrate: $x^2-6^2=(x-6)(x+6)$." },
+            { level: "mediu", text: "Simplificați $\\frac{x^2-1}{x-1}$ cu condiție.", solution: "Factorizăm: $x^2-1=(x-1)(x+1)$. Simplificăm și obținem $x+1$, cu condiția $x\\ne1$." },
+            { level: "dificil", text: "Rezolvați $x^2-3x+2=0$.", solution: "Factorizăm: $x^2-3x+2=(x-1)(x-2)$. Soluțiile sunt $x=1$ și $x=2$." },
+            { level: "f-dificil", text: "Pentru expresia $E=(x+2)^2-(x-2)^2$, calculați forma redusă și apoi determinați x dacă $E=16$.", solution: "Reducem: $(x^2+4x+4)-(x^2-4x+4)=8x$. Dacă $E=16$, avem $8x=16$, deci $x=2$." }
+          ]
         })
       }])
     },
@@ -664,7 +817,14 @@ const matematica8Data = {
           formulas: ["$f(x)=ax+b$ are grafic o dreaptă.", "Intersecția cu Oy este $(0,b)$.", "Intersecția cu Ox se obține din $ax+b=0$.", "$M=\\frac{suma}{numărul\\ valorilor}$.", "Mediana se citește după ordonarea datelor."],
           mistakes: "Nu confunda $f(0)$ cu soluția ecuației $f(x)=0$. Primul dă intersecția cu Oy, al doilea cu Ox.",
           en: { data: "$f(x)=2x-6$", ask: "intersecțiile cu axele", solution: "Cu Oy: $x=0$, deci $f(0)=-6$, punctul $(0,-6)$. Cu Ox: $2x-6=0$, deci $x=3$, punctul $(3,0)$.", answer: "$(0,-6)$ și $(3,0)$" },
-          exercises: ["Calculați $f(4)$ pentru $f(x)=3x+1$.", "Determinați x dacă $f(x)=0$ pentru $f(x)=x-5$.", "Verificați dacă $A(2,7)$ este pe graficul $f(x)=4x-1$.", "Calculați media datelor 5, 8, 9, 10.", "Determinați mediana pentru 3, 7, 7, 10, 12."]
+          exercises: [
+            { level: "usor", text: "Calculați $f(4)$ pentru $f(x)=3x+1$.", solution: "Înlocuim x=4: $f(4)=3\\cdot4+1=13$." },
+            { level: "usor", text: "Determinați x dacă $f(x)=0$ pentru $f(x)=x-5$.", solution: "Rezolvăm $x-5=0$, deci $x=5$." },
+            { level: "mediu", text: "Verificați dacă $A(2,7)$ este pe graficul $f(x)=4x-1$.", solution: "Calculăm $f(2)=4\\cdot2-1=7$. Punctul A aparține graficului." },
+            { level: "mediu", text: "Calculați media datelor 5, 8, 9, 10.", solution: "Suma este 32, iar numărul datelor este 4. Media este 8." },
+            { level: "dificil", text: "Determinați mediana pentru 3, 7, 7, 10, 12.", solution: "Datele sunt deja ordonate, iar valoarea din mijloc este 7. Deci mediana este 7." },
+            { level: "f-dificil", text: "Pentru funcția $f(x)=2x-6$, determinați intersecțiile cu axele și apoi calculați media coordonatelor absciselor acestor puncte.", solution: "Intersecția cu Oy este $(0,-6)$, iar cu Ox este $(3,0)$. Abscisele sunt 0 și 3, iar media lor este $\\frac{0+3}{2}=1{,}5$." }
+          ]
         })
       }])
     },
@@ -680,7 +840,14 @@ const matematica8Data = {
           formulas: ["Două drepte în spațiu pot fi paralele, concurente sau necoplanare.", "Distanța de la punct la plan se măsoară pe perpendiculară.", "Unghiul dreaptă-plan se măsoară cu proiecția dreptei pe plan.", "În con: $g^2=h^2+r^2$.", "În cub: $D=a\\sqrt3$."],
           mistakes: "Desenul în perspectivă poate induce în eroare. Justifică prin plan, perpendiculară sau triunghi dreptunghic.",
           en: { data: "un con are $h=12$ cm și $r=5$ cm", ask: "generatoarea", solution: "Secțiunea axială dă un triunghi dreptunghic: $g^2=12^2+5^2=169$.", answer: "$g=13$ cm" },
-          exercises: ["Dați exemplu de drepte necoplanare într-un cub.", "Calculați diagonala unui cub cu muchia 3 cm.", "Calculați generatoarea unui con cu $h=8$ cm și $r=6$ cm.", "Într-o prismă dreaptă, identificați înălțimea.", "Problemă tip EN: într-o piramidă regulată, calculați muchia laterală folosind înălțimea și distanța de la centrul bazei la un vârf."]
+          exercises: [
+            { level: "usor", text: "Dați exemplu de drepte necoplanare într-un cub.", solution: "Un exemplu este AB și $CC'$. Ele nu sunt paralele, nu se intersectează și nu se află în același plan." },
+            { level: "usor", text: "Calculați diagonala unui cub cu muchia 3 cm.", solution: "Folosim formula $D=a\sqrt3$. Pentru $a=3$, obținem $3\sqrt3$ cm." },
+            { level: "mediu", text: "Calculați generatoarea unui con cu $h=8$ cm și $r=6$ cm.", solution: "$g=\sqrt{8^2+6^2}=\sqrt{64+36}=10$ cm." },
+            { level: "mediu", text: "Într-o prismă dreaptă, identificați înălțimea.", solution: "Înălțimea prismei drepte este muchia laterală, deoarece aceasta este perpendiculară pe planele bazelor." },
+            { level: "dificil", text: "Într-o piramidă regulată, calculați muchia laterală folosind înălțimea și distanța de la centrul bazei la un vârf.", solution: "Muchia laterală se calculează ca ipotenuză într-un triunghi dreptunghic format din înălțime și distanța de la centrul bazei la un vârf: $m=\sqrt{h^2+d^2}$." },
+            { level: "f-dificil", text: "Explicați de ce desenul în perspectivă trebuie completat mental sau prin secțiuni înainte de calcul.", solution: "Desenul în perspectivă nu păstrează fidel toate unghiurile și lungimile. Pentru un calcul corect, trebuie identificate planele, secțiunile și relațiile geometrice reale, nu doar aspectul figurii." }
+          ]
         })
       }])
     },
@@ -697,7 +864,14 @@ const matematica8Data = {
             formulas: ["Prismă: $V=A_bh$, $A_l=P_bh$.", "Piramidă: $V=\\frac{A_bh}{3}$.", "Cilindru: $V=\\pi r^2h$, $A_l=2\\pi rh$.", "Con: $V=\\frac{\\pi r^2h}{3}$, $A_l=\\pi rg$.", "Sferă: $A=4\\pi R^2$, $V=\\frac{4\\pi R^3}{3}$."],
             mistakes: "Nu folosi formula de arie laterală când se cere volum. Verifică dacă ai nevoie de rază, diametru, înălțime, generatoare sau apotemă.",
             en: { data: "cilindru cu raza 4 cm și înălțimea 10 cm", ask: "volumul și aria laterală", solution: "$V=\\pi\\cdot4^2\\cdot10=160\\pi$. $A_l=2\\pi\\cdot4\\cdot10=80\\pi$.", answer: "$160\\pi$ cm$^3$, $80\\pi$ cm$^2$" },
-            exercises: ["Calculați volumul unei prisme cu $A_b=24$ cm$^2$ și $h=7$ cm.", "Calculați aria totală a unui cub cu muchia 5 cm.", "Calculați volumul unui con cu $r=3$ cm și $h=12$ cm.", "Calculați aria unei sfere cu raza 6 cm.", "Problemă tip EN: un vas cilindric cu raza 5 cm și înălțimea 20 cm este umplut pe jumătate. Calculați volumul apei."]
+            exercises: [
+              { level: "usor", text: "Calculați volumul unei prisme cu $A_b=24$ cm$^2$ și $h=7$ cm.", solution: "Folosim $V=A_b\cdot h=24\cdot7=168$ cm$^3$." },
+              { level: "usor", text: "Calculați aria totală a unui cub cu muchia 5 cm.", solution: "Aria totală a cubului este $A_t=6a^2=6\cdot25=150$ cm$^2$." },
+              { level: "mediu", text: "Calculați volumul unui con cu $r=3$ cm și $h=12$ cm.", solution: "Aplicăm formula $V=\frac{\pi r^2h}{3}=\frac{\pi\cdot9\cdot12}{3}=36\pi$ cm$^3$." },
+              { level: "mediu", text: "Calculați aria unei sfere cu raza 6 cm.", solution: "Formula este $A=4\pi R^2=4\pi\cdot36=144\pi$ cm$^2$." },
+              { level: "dificil", text: "Un vas cilindric cu raza 5 cm și înălțimea 20 cm este umplut pe jumătate. Calculați volumul apei.", solution: "Volumul total este $V=\pi\cdot5^2\cdot20=500\pi$ cm$^3$. Pe jumătate înseamnă $250\pi$ cm$^3$." },
+              { level: "f-dificil", text: "Explicați diferența dintre datele necesare pentru aria totală și cele necesare pentru volum la același corp geometric.", solution: "Pentru aria totală trebuie cunoscute suprafețele tuturor fețelor sau formulele de arie relevante. Pentru volum este esențială combinația dintre aria bazei și înălțime ori formula specifică a corpului. De aceea, nu sunt suficiente întotdeauna aceleași mărimi." }
+            ]
           })
         },
         {
@@ -714,14 +888,14 @@ const matematica8Data = {
                 <p>În testele EN, o problemă poate combina funcții, calcul algebric și geometrie. Păstrează rezultatele intermediare clare, pentru că sunt punctate.</p>
               </div>
               <h4>Exerciții propuse</h4>
-              <ul>
-                <li>Rezolvați inecuația $-3x+6\\ge0$ și scrieți soluția ca interval.</li>
-                <li>Simplificați $E=(x-4)^2-(x-4)(x+4)$.</li>
-                <li>Determinați m astfel încât punctul $A(2,9)$ să fie pe graficul $f(x)=mx+1$.</li>
-                <li>Calculați diagonala unui paralelipiped cu dimensiunile 4 cm, 6 cm, 12 cm.</li>
-                <li>Un cilindru are raza 6 cm și înălțimea 10 cm. Calculați aria laterală și volumul.</li>
-                <li>O piramidă regulată are aria bazei 36 cm$^2$ și înălțimea 9 cm. Calculați volumul.</li>
-              </ul>
+              <ul>${m8ExerciseList([
+                { level: 'usor', text: 'Rezolvați inecuația $-3x+6\\ge0$ și scrieți soluția ca interval.', solution: '$-3x\\ge-6$. Împărțim la -3 și schimbăm sensul: $x\\le2$. Soluția este $(-\\infty,2]$.' },
+                { level: 'usor', text: 'Simplificați $E=(x-4)^2-(x-4)(x+4)$.', solution: 'Dezvoltăm: $(x-4)^2=x^2-8x+16$, iar $(x-4)(x+4)=x^2-16$. Diferența este $x^2-8x+16-(x^2-16)=32-8x$.' },
+                { level: 'mediu', text: 'Determinați m astfel încât punctul $A(2,9)$ să fie pe graficul $f(x)=mx+1$.', solution: 'Înlocuim coordonatele punctului: $9=2m+1$. Rezultă $2m=8$, deci $m=4$.' },
+                { level: 'mediu', text: 'Calculați diagonala unui paralelipiped cu dimensiunile 4 cm, 6 cm, 12 cm.', solution: 'Aplicăm formula $D=\\sqrt{4^2+6^2+12^2}=\\sqrt{16+36+144}=\\sqrt{196}=14$ cm.' },
+                { level: 'dificil', text: 'Un cilindru are raza 6 cm și înălțimea 10 cm. Calculați aria laterală și volumul.', solution: 'Aria laterală este $A_l=2\\pi rh=2\\pi\\cdot6\\cdot10=120\\pi$ cm$^2$. Volumul este $V=\\pi r^2h=\\pi\\cdot36\\cdot10=360\\pi$ cm$^3$.' },
+                { level: 'f-dificil', text: 'O piramidă regulată are aria bazei 36 cm$^2$ și înălțimea 9 cm. Calculați volumul.', solution: 'Formula volumului piramidei este $V=\\frac{A_bh}{3}=\\frac{36\\cdot9}{3}=108$ cm$^3$.' }
+              ])}</ul>
             </div>
           `
         }
